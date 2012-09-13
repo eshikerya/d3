@@ -33,6 +33,16 @@ function d3_selection_attr(name, value) {
 
   // For attr(string, string), set the attribute with the specified name.
   function attrConstant() {
+	  if (this.tagName == 'foreignObject' && value == 'auto') {
+			switch (name) {
+				case 'height':
+			  	value = this.offsetHeight;
+					break;
+				case 'width':
+					value = this.offsetWidth;
+					break;
+			}
+	  }
     this.setAttribute(name, value);
   }
   function attrConstantNS() {
