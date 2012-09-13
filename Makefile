@@ -7,9 +7,7 @@ JS_TESTER = $(NODE_PATH)/vows/bin/vows
 LOCALE ?= en_US
 
 all: \
-	d3.v2.js \
-	d3.v2.min.js \
-	package.json
+	d3.v2.js
 
 # Modify this rule to build your own custom release.
 
@@ -20,8 +18,6 @@ all: \
 	d3.svg.js \
 	d3.behavior.js \
 	d3.layout.js \
-	d3.dsv.js \
-	d3.geo.js \
 	d3.geom.js \
 	d3.time.js \
 	src/end.js
@@ -234,7 +230,7 @@ test: all
 
 d3%.js: Makefile
 	@rm -f $@
-	cat $(filter %.js,$^) | $(JS_BEAUTIFIER) > $@
+	cat $(filter %.js,$^) > $@
 	@chmod a-w $@
 
 package.json: src/package.js
