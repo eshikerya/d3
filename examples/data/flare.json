@@ -46,8 +46,18 @@
       {"name": "MatrixInterpolator", "size": 2202},
       {"name": "NumberInterpolator", "size": 1382},
       {"name": "ObjectInterpolator", "size": 1629},
-      {"name": "PointInterpolator", "size": 1675},
-      {"name": "RectangleInterpolator", "size": 2042}
+      {
+		  "name": "PointInterpolator", "size": 1675,
+		  "children": [
+			  {"name": "test", "size": 10}
+		  ]
+		},
+      {
+		  "name": "RectangleInterpolator", "size": 2042,
+		  "children": [
+			  {"name": "test", "size": 10}
+		  ]
+	  }
      ]
     },
     {"name": "ISchedulable", "size": 1041},

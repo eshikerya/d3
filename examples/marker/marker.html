@@ -89,12 +89,13 @@ links.forEach(function(link) {
 var width = 960,
     height = 500;
 
+	debugger;
 var force = d3.layout.force()
     .nodes(d3.values(nodes))
     .links(links)
     .size([width, height])
     .linkDistance(60)
-    .charge(-300)
+    .charge(-500)
     .on("tick", tick)
     .start();
 

@@ -3,3 +3,5 @@ node_modules
 .DS_Store
 
 d3.v2.js
+
+*.scssc
