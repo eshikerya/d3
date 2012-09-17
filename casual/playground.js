@@ -1,24 +1,25 @@
 (function () {
-
-var tree = d3.layout.casual();
-
-var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-// Per-type markers, as they don't inherit styles.
-svg.append("defs").selectAll("marker")
-    .data(["suit", "licensing", "resolved"])
-  .enter().append("marker")
-    .attr("id", String)
-    .attr("viewBox", "0 -5 10 10")
-    .attr("refX", 15)
-    .attr("refY", -1.5)
-    .attr("markerWidth", 6)
-    .attr("markerHeight", 6)
-    .attr("orient", "auto")
-  .append("path")
-    .attr("d", "M0,-5L10,0L0,5");
 	
-
+	var c = d3.layout.casual().nodes(data.tasks, data.transitions);
+	
+	var svg = d3.select("body").append("svg")
+	    .attr("width", '100%')
+	    .attr("height", '100%')
+		.append('g');
+		
+	c.init(svg);
+	
+	var nodes = svg.selectAll('foreignObject')
+		.data(d3.values(c.nodes()))
+		.enter().append('foreignObject')
+			.attr('x', function (d) { return d.colId * 100 })
+			.attr('y', function (d) { return d.rowId * 100 })
+			.attr('width', 80)
+			.attr('height', '2em')
+			.html(function (d) { return '<div>' + d.name + '</div>'});
+			
+	var links = svg.selectAll('path.links')
+			.data(d3.values(c.links()))
+			.enter().append('path.links');
+			
 })();
