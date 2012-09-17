@@ -1,63 +1,24 @@
 (function () {
+
+var tree = d3.layout.casual();
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+// Per-type markers, as they don't inherit styles.
+svg.append("defs").selectAll("marker")
+    .data(["suit", "licensing", "resolved"])
+  .enter().append("marker")
+    .attr("id", String)
+    .attr("viewBox", "0 -5 10 10")
+    .attr("refX", 15)
+    .attr("refY", -1.5)
+    .attr("markerWidth", 6)
+    .attr("markerHeight", 6)
+    .attr("orient", "auto")
+  .append("path")
+    .attr("d", "M0,-5L10,0L0,5");
 	
-	var tasks = {},
-		trans = {
-			bySource: {},
-			byTargets: {}
-		},
-		root = null;
-	
-	data.transitions.forEach(function (v) {
-		(!trans.bySource[v.source] && (trans.bySource[v.source] = []) || trans.bySource[v.source]).push(v);
-		(!trans.byTarget[v.target] && (trans.byTarget[v.target] = []) || trans.byTarget[v.target]).push(v);
-	});
-	
-	data.tasks.forEach(function (v) {
-		tasks[v.id] = v;
-		v.source = trans.byTarget[v.id];
-		v.target = trans.bySource[v.id];
-	});
-	
-	
-	
-	var width = 960,
-	    height = 2200;
-
-	var cluster = d3.layout.cluster()
-	    .size([height, width - 160]);
-
-	var diagonal = d3.svg.diagonal()
-	    .projection(function(d) { return [d.y, d.x]; });
-
-	var vis = d3.select("#chart").append("svg")
-	    .attr("width", width)
-	    .attr("height", height)
-	  .append("g")
-	    .attr("transform", "translate(40, 0)");
-
-	d3.json("../data/flare.json", function(json) {
-	  var nodes = cluster.nodes(json);
-
-	  var link = vis.selectAll("path.link")
-	      .data(cluster.links(nodes))
-	    .enter().append("path")
-	      .attr("class", "link")
-	      .attr("d", diagonal);
-
-	  var node = vis.selectAll("g.node")
-	      .data(nodes)
-	    .enter().append("g")
-	      .attr("class", "node")
-	      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
-
-	  node.append("circle")
-	      .attr("r", 4.5);
-
-	  node.append("text")
-	      .attr("dx", function(d) { return d.children ? -8 : 8; })
-	      .attr("dy", 3)
-	      .attr("text-anchor", function(d) { return d.children ? "end" : "start"; })
-	      .text(function(d) { return d.name; });
-	});
 
 })();

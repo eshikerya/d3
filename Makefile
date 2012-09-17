@@ -174,7 +174,8 @@ d3.layout.js: \
 	src/layout/pack.js \
 	src/layout/cluster.js \
 	src/layout/tree.js \
-	src/layout/treemap.js
+	src/layout/treemap.js \
+	src/layout/casual.js
 
 d3.geo.js: \
 	src/geo/geo.js \
