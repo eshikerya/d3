@@ -5,6 +5,7 @@ d3.layout.casual = function() {
 			byTarget: {},
 			list: {}
 		},
+		_axis,
 		casual = {};
 		
 	casual.init = function (svg) {
@@ -13,8 +14,8 @@ d3.layout.casual = function() {
 		  .enter().append("marker")
 		    .attr("id", String)
 		    .attr("viewBox", "0 -5 10 10")
-		    .attr("refX", 15)
-		    .attr("refY", -1.5)
+		    .attr("refX", 0)
+		    .attr("refY", 0)
 		    .attr("markerWidth", 6)
 		    .attr("markerHeight", 6)
 		    .attr("orient", "auto")
@@ -30,8 +31,8 @@ d3.layout.casual = function() {
 		if (transitions) {
 			transitions.forEach(function (v) {
 				_trans.list[v['id']] = v;
-				(!_trans.bySource[v['source']] && (_trans.bySource[v['source']] = []) || _trans.bySource[v['source']]).push(_trans.list[v['id']]);
-				(!_trans.byTarget[v['target']] && (_trans.byTarget[v['target']] = []) || _trans.byTarget[v['target']]).push(_trans.list[v['id']]);
+				(!_trans.bySource[v['source']] && (_trans.bySource[v['source']] = []) || _trans.bySource[v['source']]).push(v['target']);
+				(!_trans.byTarget[v['target']] && (_trans.byTarget[v['target']] = []) || _trans.byTarget[v['target']]).push(v['source']);
 			});
 		}
 		
@@ -45,7 +46,20 @@ d3.layout.casual = function() {
 	}
 	
 	casual.links = function () {
-		return _trans.list;
+		var res = [];
+		$.each(_trans.list, function (i, o) {
+			var s = _nodes[o['source']],
+				d = _nodes[o['target']];
+				
+			o.sourceColId = s && s['colId'];
+			o.sourceRowId = s && s['rowId'];
+			o.destColId = d && d['colId'];
+			o.destRowId = d && d['rowId'];
+			o.cName = s['status'].substr(0, 1) + d['status'].substr(0, 1);
+			
+			res.push(o);
+		})
+		return res;
 	}
 	
 	return casual;

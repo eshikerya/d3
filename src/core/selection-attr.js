@@ -36,7 +36,7 @@ function d3_selection_attr(name, value) {
 	  if (this.tagName == 'foreignObject' && value == 'auto') {
 			switch (name) {
 				case 'height':
-			  	value = this.offsetHeight;
+			  		value = this.offsetHeight;
 					break;
 				case 'width':
 					value = this.offsetWidth;

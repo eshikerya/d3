@@ -34,7 +34,7 @@ var data = {
 		},
 		{
 			"id": "5",
-			"name": "task5",
+			"name": "task5<br />new line",
 			"type": "Task",
 			"status": "Unblocked",
 			"colId": 10,

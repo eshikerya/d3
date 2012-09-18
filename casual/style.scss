@@ -1,0 +1,19 @@
+path {
+	&.link {
+		fill: none;
+		stroke: #CCCCCC;
+		stroke-width: 1.5px;
+	}
+}
+
+foreignObject {
+	body {
+		margin: 0;
+		padding: 0;
+	}
+	div {
+		border: 1px solid gray;
+		padding: 3px;
+		background: white;
+	}
+}
