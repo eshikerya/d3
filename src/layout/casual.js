@@ -72,8 +72,8 @@ d3.layout.casual = function() {
 			_nodes[v['id']] = v;
 			v['fromId'] = _trans.byTarget[v.id] || [];
 			v['toId'] = _trans.bySource[v.id] || [];
-			_axis.x.add(v['colId']);
-			_axis.y.add(v['rowId']);
+			_axis.x.add(Number(v['colId'] || 0));
+			_axis.y.add(Number(v['rowId'] || 0));
 		});
 		
 		_axis.x.balanceSpace().update();

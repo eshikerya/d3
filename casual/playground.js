@@ -172,30 +172,34 @@
 			
 		d3.selectAll(dragLines).attr('d', diagonal);
 	}
+	
+	function linkStartXY(d) {
+		var e = nodes_map[d['fromId']],
+			bb = e && e.getBBox(),
+			x = Number(e.getAttribute('x')),
+			y = Number(e.getAttribute('y'));
+				
+		return {
+			x: x + bb.width / 2,
+			y: y + bb.height
+		}
+	}
+	
+	function linkEndXY(d) {
+		var e = nodes_map[d['toId']],
+			bb = e && e.getBBox(),
+			x = Number(e.getAttribute('x')),
+			y = Number(e.getAttribute('y'));
+				
+		return {
+			x: x + bb.width / 2,
+			y: y
+		}
+	}
 				
 	var diagonal = d3.svg.casualLink()
-			.source(function (d) {
-				var e = nodes_map[d['fromId']],
-					bb = e && e.getBBox(),
-					x = Number(e.getAttribute('x')),
-					y = Number(e.getAttribute('y'));
-				
-				return {
-					x: x + bb.width / 2,
-					y: y + bb.height
-				}
-			})
-			.target(function (d) {
-				var e = nodes_map[d['toId']],
-					bb = e && e.getBBox(),
-					x = Number(e.getAttribute('x')),
-					y = Number(e.getAttribute('y'));
-				
-				return {
-					x: x + bb.width / 2,
-					y: y
-				}
-			});
+			.source(linkStartXY)
+			.target(linkEndXY);
 		
 	var c = d3.layout.casual().init(svg).nodes(data.tasks, data.transitions);
 	
@@ -205,48 +209,102 @@
 		
 	function clearSelection() {
 		if (selection.length == 0) { return }
-		d3.selectAll('foreignObject.selected').classed('selected', false);
+		nodes.classed('selected', false);
 		selection = [];
 	}
 	
-	var links = svg.selectAll('path.links')
-			.data(d3.values(c.links()))
-			.enter().append('path')
-				.attr('class', function (d) { return 'link ' + d.cName })
-				.attr("marker-end", 'url(#std)')
-				.attr('marker-start', 'url(#diamond)')
-				.on('click', function (ev) {
-					console.log('path.click', ev);
-					d3.event.stopPropagation();
-					clearSelection();
+	function updateLinks() {
+		links = svg.selectAll('path.links')
+			.data(d3.values(c.links()));
+			
+		links.enter().append('path')
+			.attr('class', function (d) { return 'link ' + d.cName })
+			.attr("marker-end", 'url(#std)')
+			// .attr('marker-start', 'url(#diamond)')
+			.on('click', function (d) {
+				console.log('path.click', d);
+				selectLink(this, d);
+				d3.event.stopPropagation();
+				clearSelection();
+			})
+			.call(function (selection) {
+				selection.each(function (d) {
+					links_map[d['id']] = this;
 				})
-				.call(function (selection) {
-					selection.each(function (d) {
-						links_map[d['id']] = this;
-					})
-				});
+			});
+			
+		links.exit().remove();
+	}
+	
+	var links, linkEdit;
+			
+	updateLinks();
 				
 	function selectNode(node, data) {
-		console.log('node.click', data, d3.event);
-				
+		console.log('selectNode', data, d3.event);
+
 		if (!d3.event.metaKey && !d3.event.ctrlKey) {
 			clearSelection();
 		}
-		selection.push(node);
 				
-		d3.select(node).classed('selected', true);
+		if (selection.indexOf(node) == -1) {
+			selection.push(node);
+			nodes.moveOnTop(node).order();
+		} else {
+			var r = selection.splice(selection.indexOf(node), 1);
+			d3.select(r[0]).classed('selected', false);
+		}
+		
+		d3.selectAll(selection).classed('selected', true);
 	}
+	
+	function selectLink(link, data) {
+		console.log('selectLink', data);
+		var c = [];
+		if (link && !data) {
+			data = link.data();
+		}
+		
+		if (data) {
+			c.push(linkStartXY(data));
+			c.push(linkEndXY(data));
+		}
 
-	var nodes = svg.selectAll('foreignObject')
-		.data(d3.values(c.nodes()))
-		.enter().append('foreignObject')
+console.log(c);
+		
+		linkEdit = svg.selectAll('circle.linkHandle').data(c, function(d) { return d; });
+				
+		linkEdit.enter().append('circle')
+			.classed('linkHandle', true)
+			.attr('cx', function (d) { 
+				return d.x; 
+			})
+			.attr('cy', function (d) {
+				return d.y;
+			})
+			.attr('r', 1)
+			.transition()
+				.attr('r', 8)
+				.duration(250)
+				.ease('bounce');
+			
+		linkEdit.exit()
+			.transition()
+				.attr('r', 1)
+				.duration(200)
+				.remove();
+	}
+	
+	function updateNodes() {
+		nodes = svg.selectAll('foreignObject')
+			.data(d3.values(c.nodes()));
+			
+		nodes.enter().append('foreignObject')
 			.attr('x', function (d) {
 				return c.axis().x.axisById(d['colId']);
-				// return d.colId * 100 - 500
 			})
 			.attr('y', function (d) {
 				return c.axis().y.axisById(d['rowId']);
-				// return d.rowId * 100
 			})
 			.html(function (d) { 
 				return '<div>' + d.name + '</div>'
@@ -265,6 +323,13 @@
 				})
 			})
 			.call(drag);
+			
+		nodes.exit().remove();
+	}
+
+	var nodes;
+		
+	updateNodes();
 	
 	links.attr('d', diagonal);
 
