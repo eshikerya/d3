@@ -150,6 +150,7 @@ d3.svg.js: \
 	src/svg/chord.js \
 	src/svg/diagonal.js \
 	src/svg/diagonal-radial.js \
+	src/svg/cLink.js \
 	src/svg/mouse.js \
 	src/svg/touches.js \
 	src/svg/symbol.js \
@@ -174,8 +175,7 @@ d3.layout.js: \
 	src/layout/pack.js \
 	src/layout/cluster.js \
 	src/layout/tree.js \
-	src/layout/treemap.js \
-	src/layout/casual.js
+	src/layout/treemap.js
 
 d3.geo.js: \
 	src/geo/geo.js \
