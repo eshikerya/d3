@@ -125,7 +125,8 @@ d3.core.js: \
 	src/core/timer.js \
 	src/core/mouse.js \
 	src/core/touches.js \
-	src/core/noop.js
+	src/core/noop.js \
+	lib/kevlindev/Intersection.js
 
 d3.scale.js: \
 	src/scale/scale.js \

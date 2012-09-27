@@ -16,7 +16,7 @@ path {
 	&.link {
 		fill: none;
 		stroke: #CCCCCC;
-		stroke-width: 1.5px;
+		stroke-width: 2px;
 	}
 }
 
@@ -27,7 +27,8 @@ svg {
 		background: transparent;
 	}
 	div {
-		border: 1px solid gray;
+		border: 2px solid gray;
+		border-radius: 5px;
 		padding: 3px;
 		background: white;
 	}

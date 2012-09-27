@@ -7,16 +7,32 @@
 	/** @const */ROW_HEIGHT = 15,
 	/** @const */COL_WIDTH = 15;
 	
+	var zoomNPan = d3.behavior.zoom().scaleExtent([0.5, 1]).on("zoom", zoom);
+	
 	var svg = d3.select("body").append("svg")
 	    .attr("width", '100%')
 	    .attr("height", '100%')
-		.on('click', function (ev) {
-			console.log('svg.click', ev);
+		.on('click', function () {
+			var z = zoomNPan.translate(),
+				p = {
+					x: d3.event.clientX - z[0],
+					y: d3.event.clientY - z[1]
+				}
+				
+			console.log('svg.click', d3.event, p);
 			clearSelection();
+			isLinkClicked(p)
 		})
-	    .call(d3.behavior.zoom().scaleExtent([0.5, 1]).on("zoom", zoom))
+	    .call(zoomNPan)
 		.append('g');
-		
+
+	function isLinkClicked(c) {
+		links.filter(function (d) {
+			debugger;
+			var e = Intersection.intersectBezier2Circle();
+		});
+	}	
+
 	function zoom() {
 		svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 	}
@@ -236,11 +252,11 @@
 		links.exit().remove();
 	}
 	
-	var links, linkEdit;
+	var links, linkHandles;
 			
 	updateLinks();
 	
-	linkHandles = d3.behavior.drag
+	// linkEditDrag = d3.behavior.drag
 				
 	function selectNode(node, data) {
 		console.log('selectNode', data, d3.event);
@@ -272,11 +288,9 @@
 			c.push(linkEndXY(data));
 		}
 
-console.log(c);
-		
-		linkEdit = svg.selectAll('circle.linkHandle').data(c, function(d) { return '' + d.x + d.yq; });
+		linkHandles = svg.selectAll('circle.linkHandle').data(c, function(d) { return '' + d.x + d.y; });
 				
-		linkEdit.enter().append('circle')
+		linkHandles.enter().append('circle')
 			.classed('linkHandle', true)
 			.attr('cx', function (d) { 
 				return d.x; 
@@ -285,13 +299,13 @@ console.log(c);
 				return d.y;
 			})
 			.attr('r', 1)
-			.call()
+			// .call()
 			.transition()
 				.attr('r', 8)
 				.duration(250)
 				.ease('bounce');
 			
-		linkEdit.exit()
+		linkHandles.exit()
 			.transition()
 				.attr('r', 1)
 				.duration(200)
