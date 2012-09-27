@@ -239,6 +239,8 @@
 	var links, linkEdit;
 			
 	updateLinks();
+	
+	linkHandles = d3.behavior.drag
 				
 	function selectNode(node, data) {
 		console.log('selectNode', data, d3.event);
@@ -272,7 +274,7 @@
 
 console.log(c);
 		
-		linkEdit = svg.selectAll('circle.linkHandle').data(c, function(d) { return d; });
+		linkEdit = svg.selectAll('circle.linkHandle').data(c, function(d) { return '' + d.x + d.yq; });
 				
 		linkEdit.enter().append('circle')
 			.classed('linkHandle', true)
@@ -283,6 +285,7 @@ console.log(c);
 				return d.y;
 			})
 			.attr('r', 1)
+			.call()
 			.transition()
 				.attr('r', 8)
 				.duration(250)
