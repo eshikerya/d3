@@ -14,23 +14,40 @@
 	    .attr("height", '100%')
 		.on('click', function () {
 			var z = zoomNPan.translate(),
+				s = zoomNPan.scale(),
 				p = {
-					x: d3.event.clientX - z[0],
-					y: d3.event.clientY - z[1]
+					x: (d3.event.clientX - z[0]) / s,
+					y: (d3.event.clientY - z[1]) / s
 				}
 				
-			console.log('svg.click', d3.event, p);
+			console.log('svg.click', d3.event, d3.mouse(this), p, s);
 			clearSelection();
 			isLinkClicked(p)
 		})
 	    .call(zoomNPan)
 		.append('g');
+		
+		svg.append('circle')
+			.classed('clicker', true)
+			.attr('cx', 0)
+			.attr('cy', 0)
+			.attr('r', 5);
 
 	function isLinkClicked(c) {
-		links.filter(function (d) {
-			debugger;
-			var e = Intersection.intersectBezier2Circle();
-		});
+		var clicker = svg.select('circle.clicker')
+				.attr('cx', c.x)
+				.attr('cy', c.y)
+		
+		var link = links.filter(function (d) {
+			var e = Intersection.intersectPathShape(new Path(this), new Circle(clicker.node()));
+			return e['status'] == 'Intersection' ? this : null
+		}).node();
+		
+		if (link) {
+			selectLink(link);
+		} else {
+			svg.selectAll('circle.linkHandle').call(clearLinkHandles)
+		}
 	}	
 
 	function zoom() {
@@ -189,8 +206,12 @@
 		d3.selectAll(dragLines).attr('d', diagonal);
 	}
 	
+	function getTaskNode(id) {
+		return nodes_map[id];
+	}
+	
 	function linkStartXY(d) {
-		var e = nodes_map[d['fromId']],
+		var e = getTaskNode(d['fromId']),
 			bb = e && e.getBBox(),
 			x = Number(e.getAttribute('x')),
 			y = Number(e.getAttribute('y'));
@@ -202,7 +223,7 @@
 	}
 	
 	function linkEndXY(d) {
-		var e = nodes_map[d['toId']],
+		var e = getTaskNode(d['toId']),
 			bb = e && e.getBBox(),
 			x = Number(e.getAttribute('x')),
 			y = Number(e.getAttribute('y'));
@@ -224,9 +245,18 @@
 		selection = [];
 		
 	function clearSelection() {
-		if (selection.length == 0) { return }
-		nodes.classed('selected', false);
+		nodes.classed('selected-task', false);
+		links.classed('selected-link', false);
+		
 		selection = [];
+	}
+	
+	function clearLinkHandles() {
+		this.transition()
+			.attr('r', 1)
+			.duration(150)
+			.remove();
+
 	}
 	
 	function updateLinks() {
@@ -252,7 +282,7 @@
 		links.exit().remove();
 	}
 	
-	var links, linkHandles;
+	var links, linkHandles = [[]];
 			
 	updateLinks();
 	
@@ -264,29 +294,34 @@
 		if (!d3.event.metaKey && !d3.event.ctrlKey) {
 			clearSelection();
 		}
+
+		svg.selectAll('circle.linkHandle').call(clearLinkHandles)
 				
 		if (selection.indexOf(node) == -1) {
 			selection.push(node);
 			nodes.moveOnTop(node).order();
 		} else {
 			var r = selection.splice(selection.indexOf(node), 1);
-			d3.select(r[0]).classed('selected', false);
+			d3.select(r[0]).classed('selected-task', false);
 		}
 		
-		d3.selectAll(selection).classed('selected', true);
+		d3.select(linkHandles[0].concat(links[0].concat(nodes[0]))).order();
+		d3.selectAll(selection).classed('selected-task', true);
 	}
 	
 	function selectLink(link, data) {
 		console.log('selectLink', data);
 		var c = [];
 		if (link && !data) {
-			data = link.data();
+			data = d3.select(link).data()[0];
 		}
 		
 		if (data) {
 			c.push(linkStartXY(data));
 			c.push(linkEndXY(data));
 		}
+		
+		d3.select(link).classed('selected-link', true);
 
 		linkHandles = svg.selectAll('circle.linkHandle').data(c, function(d) { return '' + d.x + d.y; });
 				
@@ -299,17 +334,15 @@
 				return d.y;
 			})
 			.attr('r', 1)
-			// .call()
+			.call(function (d) {
+				d3.selectAll([this[0][0], this[0][1], link, getTaskNode(data['fromId']), getTaskNode(data['toId'])]).order();
+			})
 			.transition()
 				.attr('r', 8)
 				.duration(250)
 				.ease('bounce');
 			
-		linkHandles.exit()
-			.transition()
-				.attr('r', 1)
-				.duration(200)
-				.remove();
+		linkHandles.exit().call(clearLinkHandles);
 	}
 	
 	function updateNodes() {

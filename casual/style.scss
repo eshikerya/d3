@@ -32,10 +32,17 @@ svg {
 		padding: 3px;
 		background: white;
 	}
-	.selected {
+	.selected-task {
 		div {
 			background: red;
 		}
+	}
+	.selected-link {
+		stroke: green;
+	}
+	.clicker {
+		stroke-width: 1px;
+		display: none;
 	}
 	.linkHandle {
 		stroke: #000;
