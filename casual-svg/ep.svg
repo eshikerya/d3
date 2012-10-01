@@ -28,8 +28,10 @@
 		</marker>
 	</defs>
 	<g id="view">
-		<g id="helperLayer-1"></g>
-		<g id="linksLayer"></g>
-		<g id="tasksLayer"></g>
+		<!-- <g id="helperLayer-1"></g>
+		<g id="linksLayer"></g> -->
+		<g id="tasksLayer">
+			<text xmlns="http://www.w3.org/2000/svg" id="info" x="5" y="10pt" font-size="10pt">Intersection</text>
+		</g>
 	</g>
 </svg>

@@ -27,10 +27,11 @@
 		
 	function updateTasks() {
 		nodes = ntasks.selectAll('foreignObject')
-			.data(d3.values(dtasks));
+			.data(d3.values(dtasks), function (d) { return d['id']; });
 			
 		nodes.enter().append('foreignObject')
 			.classed('taskWrapper', true)
+			.attr('requiredExtensions', 'http://www.w3.org/1999/xhtml')
 			.attr('x', function (d) {
 				return axis.x.axisById(d['colId']);
 			})
@@ -40,7 +41,7 @@
 			.html(function (d) { 
 				return '<div>' + d.name + '</div>'
 			})
-			// .attr('width', _.TASK_WIDTH)
+			.attr('width', _.TASK_WIDTH)
 			.attr('height', function (d) {
 				return this.childNodes[0].offsetHeight;
 			})

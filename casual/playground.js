@@ -4,8 +4,8 @@
 	/** @const */ROW_INC = 100,
 	/** @const */INIT_COL = 1e6,
 	/** @const */COL_INC = 100,
-	/** @const */ROW_HEIGHT = 15,
-	/** @const */COL_WIDTH = 15;
+	/** @const */ROW_HEIGHT = 10,
+	/** @const */COL_WIDTH = 10;
 	
 	var zoomNPan = d3.behavior.zoom().scaleExtent([0.5, 1]).on("zoom", zoom);
 	
@@ -23,15 +23,15 @@
 			console.log('svg.click', d3.event, d3.mouse(this), p, s);
 			clearSelection();
 			isLinkClicked(p)
-		})
-	    .call(zoomNPan)
-		.append('g');
+		}).call(zoomNPan).append('g')
+
+	var c = d3.layout.casual().init(svg).nodes(data.tasks, data.transitions);
 		
-		svg.append('circle')
-			.classed('clicker', true)
-			.attr('cx', 0)
-			.attr('cy', 0)
-			.attr('r', 5);
+	svg.append('circle')
+		.classed('clicker', true)
+		.attr('cx', 0)
+		.attr('cy', 0)
+		.attr('r', 5);
 
 	function isLinkClicked(c) {
 		var clicker = svg.select('circle.clicker')
@@ -238,8 +238,6 @@
 			.source(linkStartXY)
 			.target(linkEndXY);
 		
-	var c = d3.layout.casual().init(svg).nodes(data.tasks, data.transitions);
-	
 	var nodes_map = {},
 		links_map = {},
 		selection = [];
@@ -256,15 +254,15 @@
 			.attr('r', 1)
 			.duration(150)
 			.remove();
-
 	}
 	
 	function updateLinks() {
-		links = svg.selectAll('path.links')
+		links = svg.select('#linksLayer').selectAll('path.links')
 			.data(d3.values(c.links()));
 			
 		links.enter().append('path')
-			.attr('class', function (d) { return 'link ' + d.cName })
+			.classed('link', true)
+			.attr('stroke', function (d) { return 'url(#' + d.cName + ')' })
 			.attr("marker-end", 'url(#std)')
 			// .attr('marker-start', 'url(#diamond)')
 			.on('click', function (d) {
@@ -305,7 +303,7 @@
 			d3.select(r[0]).classed('selected-task', false);
 		}
 		
-		d3.select(linkHandles[0].concat(links[0].concat(nodes[0]))).order();
+		// d3.select(linkHandles[0].concat(links[0].concat(nodes[0]))).order();
 		d3.selectAll(selection).classed('selected-task', true);
 	}
 	
@@ -323,7 +321,7 @@
 		
 		d3.select(link).classed('selected-link', true);
 
-		linkHandles = svg.selectAll('circle.linkHandle').data(c, function(d) { return '' + d.x + d.y; });
+		linkHandles = svg.select('#helperLayer').selectAll('circle.linkHandle').data(c, function(d) { return '' + d.x + d.y; });
 				
 		linkHandles.enter().append('circle')
 			.classed('linkHandle', true)
@@ -334,11 +332,11 @@
 				return d.y;
 			})
 			.attr('r', 1)
-			.call(function (d) {
-				d3.selectAll([this[0][0], this[0][1], link, getTaskNode(data['fromId']), getTaskNode(data['toId'])]).order();
-			})
+			// .call(function (d) {
+			// 	d3.selectAll([this[0][0], this[0][1], link, getTaskNode(data['fromId']), getTaskNode(data['toId'])]).order();
+			// })
 			.transition()
-				.attr('r', 8)
+				.attr('r', 5)
 				.duration(250)
 				.ease('bounce');
 			
@@ -346,8 +344,8 @@
 	}
 	
 	function updateNodes() {
-		nodes = svg.selectAll('foreignObject')
-			.data(d3.values(c.nodes()));
+		nodes = svg.select('#tasksLayer').selectAll('foreignObject')
+			.data(d3.values(c.nodes()), function (d) { return d['id']; });
 			
 		nodes.enter().append('foreignObject')
 			.attr('x', function (d) {
@@ -356,10 +354,11 @@
 			.attr('y', function (d) {
 				return c.axis().y.axisById(d['rowId']);
 			})
+			.attr('class', function(d) { return d['state']; })
 			.html(function (d) { 
 				return '<div>' + d.name + '</div>'
 			})
-			.attr('width', 80)
+			.attr('width', 245)
 			.attr('height', function (d) {
 				return this.childNodes[0].offsetHeight;
 			})

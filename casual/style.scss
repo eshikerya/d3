@@ -1,3 +1,17 @@
+$doneBorder: #71e294;
+$doneText: #1e2c4f;
+$doneBG: #e8ffed;
+
+$openBorder: #56c3da;
+$openText: #192e4d;
+$openBG: #fff;
+
+$blockedBorder: #c7d2d6;
+$blockedText: #6a6f82;
+$blockedBG: #e4ecee;
+
+$alertBorder: #ff5800;
+
 html > body {
 	height: 100%;
 	width: 100%;
@@ -15,7 +29,7 @@ html > body {
 path {
 	&.link {
 		fill: none;
-		stroke: #CCCCCC;
+/*		stroke: #CCCCCC;*/
 		stroke-width: 2px;
 	}
 }
@@ -26,11 +40,35 @@ svg {
 		padding: 1px;
 		background: transparent;
 	}
+	.Blocked div {
+		border-color: $blockedBorder;
+		color: $blockedText;
+		background-color: $blockedBG;
+	}
+	.Completed div {
+		border-color: $doneBorder;
+		color: $doneText;
+		background-color: $doneBG;
+	}
+	.Unblocked div {
+		border-color: $openBorder;
+		color: $openText;
+		background-color: $openBG;
+	}
+	path {
+		
+	}
+	g.view {
+/*		fill: url(#squares);*/
+	}
 	div {
+		font-size: 12pt;
+		font-family: Helvetica;
 		border: 2px solid gray;
 		border-radius: 5px;
-		padding: 3px;
+		padding: 10px;
 		background: white;
+/*		width: 200px;*/
 	}
 	.selected-task {
 		div {
