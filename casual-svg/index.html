@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>D3-svg playground</title>
+		<script>
+			var core = {
+				Classes: {}
+			};
+		</script>
+		<script type="text/javascript" src="const.js"></script>
+		<script type="text/javascript" src="../casual/libs.js"></script>
+		<script type="text/javascript" src="../casual/data.js"></script>
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+			}
+			iframe {
+				border: none;
+				margin: 0;
+				padding: 0;
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<iframe src="ep.svg" id="img" src="ep.svg" width="100%" height="100%"></iframe>
+		<script>
+			function sendMsg(msgType, data) {
+				var msg = {
+					msgType: msgType,
+					data: data
+				}
+				console.log('owner::sendMsg', msg);
+				$('#img')[0].contentWindow.postMessage(msg, '*');
+			}
+			$(window).bind('message', function (evt) {
+				var ev = evt.originalEvent.data,
+					d = ev.data;
+				console.log('owner::message', ev, d);
+				
+				switch (ev.msgType) {
+					case _.epReady:
+						sendMsg(_.epSetData, data);
+						break;
+				}
+			});
+			// window.addEventListener("message", function (data) {
+			// 	console.log(arguments);
+			// }, false);
+		</script>
+	</body>
+</html>
