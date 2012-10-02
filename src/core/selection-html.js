@@ -2,7 +2,8 @@ d3_selectionPrototype.html = function(value) {
 	var fo = this.node().tagName == 'foreignObject';
 	
 	function createEl(trg) {
-		var b = document.createElementNS('http://www.w3.org/1999/xhtml', "body");
+		var b = document.createElement('div');
+		b.className = 'foContainer';
 		trg.appendChild(b);
 		return true;
 	}
