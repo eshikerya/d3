@@ -1,5 +1,5 @@
 d3_selectionPrototype.html = function(value) {
-	var fo = this.node().tagName == 'foreignObject';
+	var fo = this.node() && this.node().tagName == 'foreignObject';
 	
 	function createEl(trg) {
 		var b = document.createElement('div');
