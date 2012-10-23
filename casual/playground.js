@@ -213,24 +213,30 @@
 	function linkStartXY(d) {
 		var e = getTaskNode(d['fromId']),
 			bb = e && e.getBBox(),
-			x = Number(e.getAttribute('x')),
-			y = Number(e.getAttribute('y'));
-				
-		return {
-			x: x + bb.width / 2,
-			y: y + bb.height
+			x = e && Number(e.getAttribute('x')),
+			y = e && Number(e.getAttribute('y'));
+		if (!e) {
+			return false;
+		} else {
+			return {
+				x: x + bb.width / 2,
+				y: y + bb.height
+			}
 		}
 	}
 	
 	function linkEndXY(d) {
 		var e = getTaskNode(d['toId']),
 			bb = e && e.getBBox(),
-			x = Number(e.getAttribute('x')),
-			y = Number(e.getAttribute('y'));
-				
-		return {
-			x: x + bb.width / 2,
-			y: y
+			x = e && Number(e.getAttribute('x')),
+			y = e && Number(e.getAttribute('y'));
+		if (!e) {
+			return false;
+		} else {
+			return {
+				x: x + bb.width / 2,
+				y: y
+			}
 		}
 	}
 				
@@ -262,8 +268,16 @@
 			
 		links.enter().append('path')
 			.classed('link', true)
-			.attr('stroke', function (d) { return 'url(#' + d.cName + ')' })
-			.attr("marker-end", 'url(#std)')
+			.attr('stroke', function (d) {
+				return d['fromId'] && d['toId'] && 'url(#BB)' || 'red';
+			})
+			.attr("marker-end", function (d) {
+				if (!d['fromId'] || !d['toId']) {
+					return 'url(#circle)';
+				} else {
+					return 'url(#std)';
+				}
+			})
 			// .attr('marker-start', 'url(#diamond)')
 			.on('click', function (d) {
 				console.log('path.click', d);

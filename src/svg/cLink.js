@@ -6,23 +6,31 @@ d3.svg.casualLink = function() {
 
 	  function casualLink(d, i) {
 	    var p0 = source.call(this, d, i),
-	        p3 = target.call(this, d, i),
-					// 	        my = (p0.y + p3.y) / 2,
-					// mx = (p0.x + p3.x) / 2,
-					// 	        p = [
-					// 	p0,
-					// 	{x: p0.x, y: p0.y + 30},
-					// 	{x: mx, y: my - 30},
-					// 	p3
-					// ];
+	        p3 = target.call(this, d, i);
+
+			switch (true) {
+				case p0 === false && p3 !== false:
+					p0 = {
+						x: p3.x,
+						y: p3.y - margin * 2
+					}
+					break;
+				case p0 !== false && p3 === false:
+					p3 = {
+						x: p0.x,
+						y: p0.y + margin * 2
+					}
+					break;
+			}
+
 	        p = [
-						p0,
-						{x: p0.x, y: p0.y + 40},
-						{x: p3.x, y: p3.y - 40},
-						p3
-					];
+				p0,
+				{x: p0.x, y: p0.y + 40},
+				{x: p3.x, y: p3.y - 40},
+				p3
+			];
 		
-	    p = p.map(function (o) { return [o.x, o.y]; });
+			p = p.map(function (o) { return [o.x, o.y]; });
 
 			return 'M' + p[0] + 'C' + p[1] + ' ' + p[2] + ' ' + p[3];
 	  }

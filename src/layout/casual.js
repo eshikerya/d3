@@ -32,6 +32,21 @@ d3.layout.casual = function() {
 			.attr('markerHeight', '5')
 			.append('polyline')
 				.attr('points', '0,0 10,5 0,10 1,5');
+
+			defs.append('marker')
+				.attr('id', 'circle')
+				.attr('viewBox', '0 0 10 10')
+				.attr('refX', '5')
+				.attr('refY', '5')
+				.attr('markerUnits', 'strokeWidth')
+				.attr('orient', 'auto')
+				.attr('markerWidth', '5')
+				.attr('markerHeight', '5')
+				.append('circle')
+					.attr('r', '5')
+					.attr('cx', '5')
+					.attr('cy', '5')
+					.attr('fill', 'red');
 			
 		defs.append('pattern')
 			.attr('id', 'squares')
@@ -106,19 +121,19 @@ d3.layout.casual = function() {
 	}
 	
 	casual.links = function () {
-		var res = [];
-		$.each(_trans.list, function (i, o) {
-			var s = _nodes[o['fromId']],
-				d = _nodes[o['toId']];
-				
-			o.sourceColId = s && s['colId'];
-			o.sourceRowId = s && s['rowId'];
-			o.destColId = d && d['colId'];
-			o.destRowId = d && d['rowId'];
-			o.cName = s['state'].substr(0, 1) + d['state'].substr(0, 1);
-			
-			res.push(o);
-		})
+		var res = d3.values(_trans.list);
+		// $.each(_trans.list, function (i, o) {
+		// 	var s = _nodes[o['fromId']],
+		// 		d = _nodes[o['toId']];
+		// 		
+		// 	// o.sourceColId = s && s['colId'];
+		// 	// o.sourceRowId = s && s['rowId'];
+		// 	// o.destColId = d && d['colId'];
+		// 	// o.destRowId = d && d['rowId'];
+		// 	// o.cName = s['state'].substr(0, 1) + d['state'].substr(0, 1);
+		// 	
+		// 	res.push(o);
+		// })
 		return res;
 	}
 	
