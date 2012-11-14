@@ -8,22 +8,24 @@ d3_selectionPrototype.html = function(value) {
 		return true;
 	}
   return arguments.length < 1
-      ? (fo && this.node() || this.node().childNodes[0]).innerHTML
-			: this.each(
-				typeof value === "function"
-	      ? function() { 
-						var v = value.apply(this, arguments);
-						fo && this.childElementCount == 0 && createEl(this);
-						(fo && this.childNodes[0] || this).innerHTML = v == null ? "" : v; 
-					}
-				: value == null
-	      ? function() {
+	? (fo && this.node() || this.node().childNodes[0]).innerHTML
+	: this.each(
+		typeof value === "function"
+			? function() { 
+				var v = value.apply(this, arguments);
+				if (v == undefined) { return; }
+				fo && this.childElementCount == 0 && createEl(this);
+				(fo && this.childNodes[0] || this).innerHTML = v == null ? "" : v; 
+			}
+			: value == null
+				? function() {
 					fo && this.childElementCount == 0 && createEl(this);
 					(fo && this.childNodes[0] || this).innerHTML = "";
 				}
-	      : function() {
+				: function() {
+					if (v == undefined) { return; }
 					fo && this.childElementCount == 0 && createEl(this);
 					(fo && this.childNodes[0] || this).innerHTML = value; 
 				}
-			);
+	);
 };
