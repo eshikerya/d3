@@ -1,6 +1,6 @@
 d3.svg.casualLink = function() {
-  var source = d3_svg_chordSource,
-      target = d3_svg_chordTarget,
+  var source = d3_source,
+      target = d3_target,
 			corner = 15,
 			margin = 10;
 
