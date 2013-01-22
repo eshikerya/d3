@@ -65,11 +65,6 @@ d3.core.js: \
 	src/core/range.js \
 	src/core/requote.js \
 	src/core/round.js \
-	src/core/xhr.js \
-	src/core/text.js \
-	src/core/json.js \
-	src/core/html.js \
-	src/core/xml.js \
 	src/core/ns.js \
 	src/core/dispatch.js \
 	src/core/format.js \
@@ -132,6 +127,12 @@ d3.core.js: \
 	src/core/mouse.js \
 	src/core/touches.js \
 	src/core/noop.js
+
+# src/core/xhr.js \
+# src/core/text.js \
+# src/core/json.js \
+# src/core/html.js \
+# src/core/xml.js \
 
 d3.scale.js: \
 	src/scale/scale.js \
