@@ -172,8 +172,8 @@ d3.behavior.js: \
 
 d3.layout.js: \
 	src/layout/layout.js \
-	src/layout/chord.js \
-	src/layout/casual.js
+	src/layout/chord.js
+	# src/layout/casual.js
 # src/layout/bundle.js \
 # src/layout/force.js \
 # src/layout/partition.js \
