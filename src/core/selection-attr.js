@@ -20,6 +20,8 @@ d3_selectionPrototype.attr = function(name, value) {
   return this.each(d3_selection_attr(name, value));
 };
 
+/** @const */ var WATCH_ATTR = /^(x|y|width|height|transform)$/;
+
 function d3_selection_attr(name, value) {
   name = d3.ns.qualify(name);
 
@@ -33,19 +35,11 @@ function d3_selection_attr(name, value) {
 
   // For attr(string, string), set the attribute with the specified name.
   function attrConstant() {
-	  if (this.tagName == 'foreignObject' && value == 'auto') {
-			switch (name) {
-				case 'height':
-			  		value = this.childNodes[0].offsetHeight;
-					break;
-				case 'width':
-					value = this.childNodes[0].offsetWidth;
-					break;
-			}
-	  }
+    WATCH_ATTR.test(name) && d3_resetElemBBoxCache(this);
     this.setAttribute(name, value);
   }
   function attrConstantNS() {
+    WATCH_ATTR.test(name) && d3_resetElemBBoxCache(this);
     this.setAttributeNS(name.space, name.local, value);
   }
 
@@ -55,11 +49,13 @@ function d3_selection_attr(name, value) {
     var x = value.apply(this, arguments);
     if (x == null) this.removeAttribute(name);
     else this.setAttribute(name, x);
+    WATCH_ATTR.test(name) && d3_resetElemBBoxCache(this);
   }
   function attrFunctionNS() {
     var x = value.apply(this, arguments);
     if (x == null) this.removeAttributeNS(name.space, name.local);
     else this.setAttributeNS(name.space, name.local, x);
+    WATCH_ATTR.test(name) && d3_resetElemBBoxCache(this);
   }
 
   return value == null

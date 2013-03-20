@@ -94,6 +94,7 @@ d3.core.js: \
 	src/core/selection-remove.js \
 	src/core/selection-data.js \
 	src/core/selection-datum.js \
+	src/core/selection-bbox.js \
 	src/core/selection-filter.js \
 	src/core/selection-order.js \
 	src/core/selection-sort.js \
