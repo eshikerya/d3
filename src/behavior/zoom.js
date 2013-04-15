@@ -96,7 +96,8 @@ d3.behavior.zoom = function() {
         w = d3.select(d3_window).on("mousemove.zoom", mousemove).on("mouseup.zoom", mouseup),
         l = location(d3.mouse(target));
 
-    d3_window.focus();
+    // NOTE: disabled to prevent braking fullscreen mode
+    // d3_window.focus();
     d3_eventCancel();
 
     function mousemove() {
