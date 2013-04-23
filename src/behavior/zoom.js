@@ -89,6 +89,10 @@ d3.behavior.zoom = function() {
   }
 
   function mousedown() {
+    // NOTE: allow to co-work zoom and rectangular selection
+    if (d3.event.metaKey || d3.event.ctrlKey) {
+      return true;
+    }
     var target = this,
         event_ = event.of(target, arguments),
         eventTarget = d3.event.target,
