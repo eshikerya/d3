@@ -4,12 +4,13 @@ d3.behavior.zoom = function() {
       scale = 1,
       scale0, // scale when we started touching
       scaleExtent = d3_behavior_zoomInfinity,
-      event = d3_eventDispatch(zoom, "zoom"),
+      event = d3_eventDispatch(zoom, "zoom", "rectSelect", "rectFinish"),
       x0,
       x1,
       y0,
       y1,
-      touchtime; // time of last touchstart (to detect double-tap)
+      touchtime, // time of last touchstart (to detect double-tap)
+      rectSelect = [0, 0, 0, 0];
 
   function zoom() {
     this.on("mousedown.zoom", mousedown)
@@ -77,6 +78,14 @@ d3.behavior.zoom = function() {
     translate[1] += p[1] - l[1];
   }
 
+  function selectRect(p, l) {
+    var np = location(p);
+    rectSelect[0] = l[0];
+    rectSelect[1] = l[1];
+    rectSelect[2] = np[0] - l[0];
+    rectSelect[3] = np[1] - l[1];
+  }
+
   function rescale() {
     if (x1) x1.domain(x0.range().map(function(x) { return (x - translate[0]) / scale; }).map(x0.invert));
     if (y1) y1.domain(y0.range().map(function(y) { return (y - translate[1]) / scale; }).map(y0.invert));
@@ -88,17 +97,20 @@ d3.behavior.zoom = function() {
     event({type: "zoom", scale: scale, translate: translate});
   }
 
+  function dispatchRS(event, type) {
+    // rescale();
+    d3.event.preventDefault();
+    event({type: type || "rectSelect", select: rectSelect});
+  }
+
   function mousedown() {
-    // NOTE: allow to co-work zoom and rectangular selection
-    if (d3.event.metaKey || d3.event.ctrlKey) {
-      return true;
-    }
     var target = this,
         event_ = event.of(target, arguments),
         eventTarget = d3.event.target,
         moved = 0,
         w = d3.select(d3_window).on("mousemove.zoom", mousemove).on("mouseup.zoom", mouseup),
-        l = location(d3.mouse(target));
+        l = location(d3.mouse(target)),
+        rectSelectFlag = d3.event.metaKey || d3.event.ctrlKey;
 
     // NOTE: disabled to prevent braking fullscreen mode
     // d3_window.focus();
@@ -106,14 +118,21 @@ d3.behavior.zoom = function() {
 
     function mousemove() {
       moved = 1;
-      translateTo(d3.mouse(target), l);
-      dispatch(event_);
+      if (rectSelectFlag) {
+        selectRect(d3.mouse(target), l);
+        dispatchRS(event_);
+      } else {
+        translateTo(d3.mouse(target), l);
+        dispatch(event_);
+      }
     }
 
     function mouseup() {
       if (moved) d3_eventCancel();
       w.on("mousemove.zoom", null).on("mouseup.zoom", null);
-      if (moved && d3.event.target === eventTarget) w.on("click.zoom", click, true);
+      if (rectSelectFlag) {
+        dispatchRS(event_, "rectFinish");
+      } else if (moved && d3.event.target === eventTarget) w.on("click.zoom", click, true);
     }
 
     function click() {
