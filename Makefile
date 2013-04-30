@@ -24,10 +24,10 @@ src/time/format-localized.js: src/locale.js src/time/format-locale.js
 d3.js: $(shell node_modules/.bin/smash --list src/d3.js)
 	@rm -f $@
 	node_modules/.bin/smash src/d3.js \
-		| sed 's/[[:<:]]VERSION[[:>:]]/"$(shell ./version)"/' > $@
+		| sed 's/[[:<:]]VERSION[[:>:]]/"$(shell ./version)"/' \
+		| node_modules/.bin/uglifyjs - -b indent-level=2 -o $@
 	@chmod a-w $@
 
-#		| node_modules/.bin/uglifyjs - -b indent-level=2 -o $@
 d3.min.js: d3.js
 	@rm -f $@
 	node_modules/.bin/uglifyjs $< -c -m -o $@
