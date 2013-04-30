@@ -30,6 +30,7 @@ d3.selection.prototype = d3_selectionPrototype;
 import "select";
 import "selectAll";
 import "attr";
+import "bbox";
 import "classed";
 import "style";
 import "property";
