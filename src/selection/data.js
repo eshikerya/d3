@@ -114,5 +114,9 @@ d3_selectionPrototype.data = function(value, key) {
 };
 
 function d3_selection_dataNode(data) {
-  return {'__data__': data};
+  var k = '__data__',
+      r = {};
+
+  r[k] = data;
+  return r;
 }
