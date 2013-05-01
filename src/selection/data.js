@@ -12,7 +12,7 @@ d3_selectionPrototype.data = function(value, key) {
     value = new Array(n = (group = this[0]).length);
     while (++i < n) {
       if (node = group[i]) {
-        value[i] = node.__data__;
+        value[i] = node['__data__'];
       }
     }
     return value;
@@ -36,7 +36,7 @@ d3_selectionPrototype.data = function(value, key) {
           keyValue;
 
       for (i = -1; ++i < n;) {
-        keyValue = key.call(node = group[i], node.__data__, i);
+        keyValue = key.call(node = group[i], node['__data__'], i);
         if (nodeByKeyValue.has(keyValue)) {
           exitNodes[i] = node; // duplicate selection key
         } else {
@@ -49,7 +49,7 @@ d3_selectionPrototype.data = function(value, key) {
         keyValue = key.call(groupData, nodeData = groupData[i], i);
         if (node = nodeByKeyValue.get(keyValue)) {
           updateNodes[i] = node;
-          node.__data__ = nodeData;
+          node['__data__'] = nodeData;
         } else if (!dataByKeyValue.has(keyValue)) { // no duplicate data key
           enterNodes[i] = d3_selection_dataNode(nodeData);
         }
@@ -67,7 +67,7 @@ d3_selectionPrototype.data = function(value, key) {
         node = group[i];
         nodeData = groupData[i];
         if (node) {
-          node.__data__ = nodeData;
+          node['__data__'] = nodeData;
           updateNodes[i] = node;
         } else {
           enterNodes[i] = d3_selection_dataNode(nodeData);
@@ -100,7 +100,7 @@ d3_selectionPrototype.data = function(value, key) {
 
   if (typeof value === "function") {
     while (++i < n) {
-      bind(group = this[i], value.call(group, group.parentNode.__data__, i));
+      bind(group = this[i], value.call(group, group.parentNode['__data__'], i));
     }
   } else {
     while (++i < n) {
@@ -114,5 +114,5 @@ d3_selectionPrototype.data = function(value, key) {
 };
 
 function d3_selection_dataNode(data) {
-  return {__data__: data};
+  return {'__data__': data};
 }
