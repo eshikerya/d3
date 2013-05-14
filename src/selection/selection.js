@@ -53,7 +53,8 @@ import "enter";
 import "transition";
 import "move-after";
 import "move-before";
-import "move-ontop"
+import "move-ontop";
+import "map";
 
 var d3_selectionRoot = d3_selection([[d3_document]]);
 
