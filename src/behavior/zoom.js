@@ -140,6 +140,7 @@ d3.behavior.zoom = function() {
       w.on("mousemove.zoom", null).on("mouseup.zoom", null);
       if (rectSelectFlag) {
         dispatchRS(event_, "rectFinish");
+        d3_eventSuppress(w, "click.zoom");
       } else if (moved && d3.event.target === eventTarget) d3_eventSuppress(w, "click.zoom");
     }
   }
