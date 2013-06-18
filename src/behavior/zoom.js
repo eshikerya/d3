@@ -3,6 +3,7 @@ import "../core/rebind";
 import "../event/event";
 import "../event/mouse";
 import "../event/touches";
+import "../event/user-select";
 import "../selection/selection";
 import "behavior";
 
@@ -120,9 +121,7 @@ d3.behavior.zoom = function() {
         l = location(d3.mouse(target)),
         rectSelectFlag = d3.event.metaKey || d3.event.ctrlKey;
 
-    // NOTE: disabled to prevent braking fullscreen mode
-    // d3_window.focus();
-    d3_eventCancel();
+        selectEnable = d3_event_userSelectSuppress("zoom");
 
     function mousemove() {
       moved = 1;
@@ -142,6 +141,8 @@ d3.behavior.zoom = function() {
         dispatchRS(event_, "rectFinish");
         d3_eventSuppress(w, "click.zoom");
       } else if (moved && d3.event.target === eventTarget) d3_eventSuppress(w, "click.zoom");
+      selectEnable();
+      if (moved && d3.event.target === eventTarget) d3_eventSuppress(w, "click.zoom");
     }
   }
 
@@ -170,7 +171,6 @@ d3.behavior.zoom = function() {
     scale0 = scale;
     translate0 = {};
     touches.forEach(function(t) { translate0[t.identifier] = location(t); });
-    d3_eventCancel();
 
     if (touches.length === 1) {
       if (now - touchtime < 500) { // dbltap
