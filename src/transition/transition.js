@@ -1,12 +1,12 @@
 import "../arrays/map";
-import "../core/array";
+import "../core/subclass";
 import "../event/dispatch";
 import "../event/timer";
 import "../interpolate/ease";
 import "../selection/selection";
 
 function d3_transition(groups, id) {
-  d3_arraySubclass(groups, d3_transitionPrototype);
+  d3_subclass(groups, d3_transitionPrototype);
 
   groups.id = id; // Note: read-only!
 
@@ -21,6 +21,7 @@ var d3_transitionPrototype = [],
 d3_transitionPrototype.call = d3_selectionPrototype.call;
 d3_transitionPrototype.empty = d3_selectionPrototype.empty;
 d3_transitionPrototype.node = d3_selectionPrototype.node;
+d3_transitionPrototype.size = d3_selectionPrototype.size;
 
 d3.transition = function(selection) {
   return arguments.length
