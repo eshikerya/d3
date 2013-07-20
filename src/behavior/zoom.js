@@ -16,6 +16,7 @@ d3.behavior.zoom = function() {
       mousemove = "mousemove.zoom",
       mouseup = "mouseup.zoom",
       event = d3_eventDispatch(zoom, "zoom", "rectSelect", "rectFinish"),
+      center, // desired position of translate0 after zooming
       x0,
       x1,
       y0,
@@ -48,6 +49,12 @@ d3.behavior.zoom = function() {
   zoom.scaleExtent = function(x) {
     if (!arguments.length) return scaleExtent;
     scaleExtent = x == null ? d3_behavior_zoomInfinity : x.map(Number);
+    return zoom;
+  };
+
+  zoom.center = function(_) {
+    if (!arguments.length) return center;
+    center = _ && _.map(Number);
     return zoom;
   };
 
@@ -204,9 +211,10 @@ d3.behavior.zoom = function() {
 
   function mousewheeled() {
     d3_eventPreventDefault();
-    if (!translate0) translate0 = location(d3.mouse(this));
+    var point = center || d3.mouse(this);
+    if (!translate0) translate0 = location(point);
     scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * scale);
-    translateTo(d3.mouse(this), translate0);
+    translateTo(point, translate0);
     dispatch(event.of(this, arguments));
   }
 
