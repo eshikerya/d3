@@ -79,9 +79,9 @@ suite.addBatch({
       },
       "can specify range values as arrays or objects": function(d3) {
         var x = d3.scale.log().range([{color: "red"}, {color: "blue"}]);
-        assert.deepEqual(x(5), {color: d3.rgb(77, 0, 178)});
+        assert.deepEqual(x(5), {color: "#4d00b2"});
         var x = d3.scale.log().range([["red"], ["blue"]]);
-        assert.deepEqual(x(5), [d3.rgb(77, 0, 178)]);
+        assert.deepEqual(x(5), ["#4d00b2"]);
       }
     },
 
@@ -89,11 +89,11 @@ suite.addBatch({
       "defaults to d3.interpolate": function(d3) {
         var x = d3.scale.log().range(["red", "blue"]);
         assert.equal(x.interpolate(), d3.interpolate);
-        assert.rgbEqual(x(5), 77, 0, 178);
+        assert.equal(x(5), "#4d00b2");
       },
       "can specify a custom interpolator": function(d3) {
         var x = d3.scale.log().range(["red", "blue"]).interpolate(d3.interpolateHsl);
-        assert.hslEqual(x(5), -83.88, 1, .5);
+        assert.equal(x(5), "#9a00ff");
       }
     },
 
@@ -206,6 +206,30 @@ suite.addBatch({
           "1e+10"
         ]);
       },
+      "generates ticks that cover the domain": function(d3) {
+        var x = d3.scale.log().domain([.01, 10000]);
+        assert.deepEqual(x.ticks(20).map(x.tickFormat(20)), [
+          "1e-2", "2e-2", "3e-2", "", "", "", "", "", "",
+          "1e-1", "2e-1", "3e-1", "", "", "", "", "", "",
+          "1e+0", "2e+0", "3e+0", "", "", "", "", "", "",
+          "1e+1", "2e+1", "3e+1", "", "", "", "", "", "",
+          "1e+2", "2e+2", "3e+2", "", "", "", "", "", "",
+          "1e+3", "2e+3", "3e+3", "", "", "", "", "", "",
+          "1e+4"
+        ]);
+      },
+      "generates ticks that cover the niced domain": function(d3) {
+        var x = d3.scale.log().domain([.0124123, 1230.4]).nice();
+        assert.deepEqual(x.ticks(20).map(x.tickFormat(20)), [
+          "1e-2", "2e-2", "3e-2", "", "", "", "", "", "",
+          "1e-1", "2e-1", "3e-1", "", "", "", "", "", "",
+          "1e+0", "2e+0", "3e+0", "", "", "", "", "", "",
+          "1e+1", "2e+1", "3e+1", "", "", "", "", "", "",
+          "1e+2", "2e+2", "3e+2", "", "", "", "", "", "",
+          "1e+3", "2e+3", "3e+3", "", "", "", "", "", "",
+          "1e+4"
+        ]);
+      },
       "can override the tick format": function(d3) {
         var x = d3.scale.log().domain([1000.1, 1]);
         assert.deepEqual(x.ticks().map(x.tickFormat(10, d3.format("+,d"))), [
@@ -282,6 +306,12 @@ suite.addBatch({
         assert.inDelta(x.domain(), [1, 1.5, 100], 1e-6);
         var x = d3.scale.log().domain([-123.1, -1.5, -.5]).nice();
         assert.inDelta(x.domain(), [-1000, -1.5, -.1], 1e-6);
+      },
+      "the niced domain is subsequently used by the scale": function(d3) {
+        var x = d3.scale.log().domain([1.5, 50]).nice();
+        assert.inDelta(x.domain(), [1, 100], 1e-6);
+        assert.inDelta(x(1), 0, 1e-6);
+        assert.inDelta(x(100), 1, 1e-6);
       }
     },
 
@@ -327,6 +357,19 @@ suite.addBatch({
         assert.inDelta(x(20), 1.30103, 1e-6);
         assert.inDelta(y(20), 1.30103, 1e-6);
         assert.isFalse(x.clamp());
+      },
+      "changes to nicing are isolated": function(d3) {
+        var x = d3.scale.log().domain([1.5, 50]), y = x.copy().nice();
+        assert.inDelta(x.domain(), [1.5, 50], 1e-6);
+        assert.inDelta(x(1.5), 0, 1e-6);
+        assert.inDelta(x(50), 1, 1e-6);
+        assert.inDelta(x.invert(0), 1.5, 1e-6);
+        assert.inDelta(x.invert(1), 50, 1e-6);
+        assert.inDelta(y.domain(), [1, 100], 1e-6);
+        assert.inDelta(y(1), 0, 1e-6);
+        assert.inDelta(y(100), 1, 1e-6);
+        assert.inDelta(y.invert(0), 1, 1e-6);
+        assert.inDelta(y.invert(1), 100, 1e-6);
       }
     }
   }
