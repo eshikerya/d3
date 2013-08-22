@@ -1,6 +1,8 @@
 import "../arrays/map";
 import "selection";
 
+var /** @const */ dataProperty = '__data';
+
 d3_selectionPrototype.data = function(value, key) {
   var i = -1,
       n = this.length,
@@ -12,7 +14,7 @@ d3_selectionPrototype.data = function(value, key) {
     value = new Array(n = (group = this[0]).length);
     while (++i < n) {
       if (node = group[i]) {
-        value[i] = node['__data__'];
+        value[i] = node[dataProperty];
       }
     }
     return value;
@@ -36,7 +38,7 @@ d3_selectionPrototype.data = function(value, key) {
           keyValue;
 
       for (i = -1; ++i < n;) {
-        keyValue = key.call(node = group[i], node['__data__'], i);
+        keyValue = key.call(node = group[i], node[dataProperty], i);
         if (nodeByKeyValue.has(keyValue)) {
           exitNodes[i] = node; // duplicate selection key
         } else {
@@ -49,7 +51,7 @@ d3_selectionPrototype.data = function(value, key) {
         keyValue = key.call(groupData, nodeData = groupData[i], i);
         if (node = nodeByKeyValue.get(keyValue)) {
           updateNodes[i] = node;
-          node['__data__'] = nodeData;
+          node[dataProperty] = nodeData;
         } else if (!dataByKeyValue.has(keyValue)) { // no duplicate data key
           enterNodes[i] = d3_selection_dataNode(nodeData);
         }
@@ -67,7 +69,7 @@ d3_selectionPrototype.data = function(value, key) {
         node = group[i];
         nodeData = groupData[i];
         if (node) {
-          node['__data__'] = nodeData;
+          node[dataProperty] = nodeData;
           updateNodes[i] = node;
         } else {
           enterNodes[i] = d3_selection_dataNode(nodeData);
@@ -100,7 +102,7 @@ d3_selectionPrototype.data = function(value, key) {
 
   if (typeof value === "function") {
     while (++i < n) {
-      bind(group = this[i], value.call(group, group.parentNode['__data__'], i));
+      bind(group = this[i], value.call(group, group.parentNode[dataProperty], i));
     }
   } else {
     while (++i < n) {
@@ -114,7 +116,7 @@ d3_selectionPrototype.data = function(value, key) {
 };
 
 function d3_selection_dataNode(data) {
-  var k = '__data__',
+  var k = dataProperty,
       r = {};
 
   r[k] = data;

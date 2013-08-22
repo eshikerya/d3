@@ -1,0 +1,6 @@
+/**
+ * @param {!string|SVGElement|HTMLElement} name
+ * @param {!string|SVGElement|HTMLElement} before
+ * @return {d3_selectionPrototype}
+ */
+d3_selectionPrototype.insert = function(name, before) {}

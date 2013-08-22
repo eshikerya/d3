@@ -1,0 +1,2 @@
+/** @return {boolean} */
+d3_selectionPrototype.empty = function() {}

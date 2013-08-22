@@ -1,0 +1,5 @@
+/**
+ * @param {!string|function(number, number): boolean}
+ * @return {d3_selectionPrototype}
+ */
+d3_selectionPrototype.filter = function(filter) {}

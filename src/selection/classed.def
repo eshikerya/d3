@@ -1,0 +1,6 @@
+/**
+ * @param {!string} name
+ * @param {?string} value
+ * @return {boolean}
+ */
+d3_selectionPrototype.classed = function (name, value) {}

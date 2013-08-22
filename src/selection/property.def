@@ -1,0 +1,6 @@
+/**
+ * @param {!string} name
+ * @param {?*} value
+ * @return {d3_selectionPrototype|*}
+ */
+d3_selectionPrototype.property = function(name, value) {}

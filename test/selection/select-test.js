@@ -44,22 +44,22 @@ suite.addBatch({
       },
       "does not propagate data from the document": function(d3) {
         var document = d3.selection().node().ownerDocument;
-        document.__data__ = 42;
-        delete document.body.__data__;
+        document[dataProperty] = 42;
+        delete document.body[dataProperty];
         try {
           assert.isUndefined(d3.select("body").datum());
         } finally {
-          delete document.__data__;
+          delete document[dataProperty];
         }
       },
       "does not propagate data from the document element": function(d3) {
         var document = d3.selection().node().ownerDocument;
-        document.documentElement.__data__ = 42;
-        delete document.body.__data__;
+        document.documentElement[dataProperty] = 42;
+        delete document.body[dataProperty];
         try {
           assert.isUndefined(d3.select("body").datum());
         } finally {
-          delete document.documentElement.__data__;
+          delete document.documentElement[dataProperty];
         }
       }
     }

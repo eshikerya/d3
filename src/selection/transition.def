@@ -1,0 +1,2 @@
+/** @return {d3_transitionPrototype} */
+d3_selectionPrototype.transition = function() {}

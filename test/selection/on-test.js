@@ -74,7 +74,7 @@ suite.addBatch({
         forms.append("input").attr("type", "submit")[0][1].click();
         assert.equal(dd, "b");
         assert.equal(ii, 1);
-        forms[0][1].__data__ = data;
+        forms[0][1][dataProperty] = data;
         forms.append("input").attr("type", "submit")[0][1].click();
         assert.equal(dd, data);
         assert.equal(ii, 1);

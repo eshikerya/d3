@@ -28,14 +28,14 @@ suite.addBatch({
       },
       "does not propagate data if data was specified": function(body) {
         var div = body.data([new Object()]).selectAll("div");
-        assert.isUndefined(div[0][0].__data__);
-        assert.isUndefined(div[0][1].__data__);
+        assert.isUndefined(div[0][0][dataProperty]);
+        assert.isUndefined(div[0][1][dataProperty]);
       },
       "does not propagate data if data was not specified": function(body) {
         var div = body.selectAll("div").data([1, 2]);
         div = body.data([new Object()]).selectAll("div");
-        assert.equal(div[0][0].__data__, 1);
-        assert.equal(div[0][1].__data__, 2);
+        assert.equal(div[0][0][dataProperty], 1);
+        assert.equal(div[0][1][dataProperty], 2);
       },
       "returns empty array if no match is found": function(body) {
         var span = body.selectAll("span");
@@ -50,7 +50,7 @@ suite.addBatch({
         assert.domEqual(tt[0], body.node(), "expected this, got {actual}");
         assert.domEqual(s[0][0], body.node().firstChild);
         assert.domEqual(s[0][1], body.node().lastChild);
-        delete body.node().__data__;
+        delete body.node()[dataProperty];
       }
     }
   }
@@ -83,19 +83,19 @@ suite.addBatch({
       },
       "does not propagate data if data was specified": function(div) {
         var span = div.selectAll("span");
-        delete span[0][0].__data__;
-        delete span[0][1].__data__;
+        delete span[0][0][dataProperty];
+        delete span[0][1][dataProperty];
         span = div.data([new Object(), new Object()]).selectAll("span");
-        assert.isUndefined(span[0][0].__data__);
-        assert.isUndefined(span[0][1].__data__);
+        assert.isUndefined(span[0][0][dataProperty]);
+        assert.isUndefined(span[0][1][dataProperty]);
       },
       "does not propagate data if data was not specified": function(div) {
         var a = new Object(), b = new Object(), span = div.selectAll("span").data([a, b]);
-        delete div[0][0].__data__;
-        delete div[0][1].__data__;
+        delete div[0][0][dataProperty];
+        delete div[0][1][dataProperty];
         span = div.selectAll("span");
-        assert.equal(span[0][0].__data__, a);
-        assert.equal(span[0][1].__data__, b);
+        assert.equal(span[0][0][dataProperty], a);
+        assert.equal(span[0][1][dataProperty], b);
       },
       "returns empty array if no match is found": function(div) {
         var div = div.selectAll("div");

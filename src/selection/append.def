@@ -1,0 +1,5 @@
+/**
+ * @param {!string} name
+ * @return {d3_selectionPrototype}
+ */
+d3_selectionPrototype.append = function(name) {}

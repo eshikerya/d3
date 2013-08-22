@@ -1,0 +1,5 @@
+/**
+ * @param {!Function} callback
+ * @return {d3_selectionPrototype}
+ */
+d3_selectionPrototype.call = function(callback) {}

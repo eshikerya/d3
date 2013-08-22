@@ -1,0 +1,12 @@
+/**
+ * @typedef {{
+ *      source: function (function): casualLink
+ *      target: function (function): casualLink
+ * }}
+ */
+var casualLink;
+
+/**
+ * @return {casualLink}
+ */
+d3.svg.casualLink = function() {}

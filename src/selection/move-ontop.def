@@ -1,0 +1,5 @@
+/**
+ * @param {!Node} node
+ * @return {d3_selectionPrototype}
+ */
+d3_selectionPrototype.moveOnTop = function(node) {}

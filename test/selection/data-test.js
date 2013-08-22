@@ -14,16 +14,16 @@ suite.addBatch({
       "assigns data as an array": function(body) {
         var data = new Object();
         body.data([data]);
-        assert.strictEqual(body.node().__data__, data);
+        assert.strictEqual(body.node()[dataProperty], data);
       },
       "assigns data as a function": function(body) {
         var data = new Object();
         body.data(function() { return [data]; });
-        assert.strictEqual(body.node().__data__, data);
+        assert.strictEqual(body.node()[dataProperty], data);
       },
       "stores data in the DOM": function(body) {
         var expected = new Object(), actual;
-        body.node().__data__ = expected;
+        body.node()[dataProperty] = expected;
         body.each(function(d) { actual = d; });
         assert.strictEqual(actual, expected);
       },
@@ -60,19 +60,19 @@ suite.addBatch({
       "assigns data as an array": function(div) {
         var a = new Object(), b = new Object();
         div.data([a, b]);
-        assert.strictEqual(div[0][0].__data__, a);
-        assert.strictEqual(div[0][1].__data__, b);
+        assert.strictEqual(div[0][0][dataProperty], a);
+        assert.strictEqual(div[0][1][dataProperty], b);
       },
       "assigns data as a function": function(div) {
         var a = new Object(), b = new Object();
         div.data(function() { return [a, b]; });
-        assert.strictEqual(div[0][0].__data__, a);
-        assert.strictEqual(div[0][1].__data__, b);
+        assert.strictEqual(div[0][0][dataProperty], a);
+        assert.strictEqual(div[0][1][dataProperty], b);
       },
       "stores data in the DOM": function(div) {
         var a = new Object(), b = new Object(), actual = [];
-        div[0][0].__data__ = a;
-        div[0][1].__data__ = b;
+        div[0][0][dataProperty] = a;
+        div[0][1][dataProperty] = b;
         div.each(function(d) { actual.push(d); });
         assert.deepEqual(actual, [a, b]);
       },
@@ -91,14 +91,14 @@ suite.addBatch({
       },
       "with no arguments, returns an array of data": function(div) {
         var a = new Object(), b = new Object(), actual = [];
-        div[0][0].__data__ = a;
-        div[0][1].__data__ = b;
+        div[0][0][dataProperty] = a;
+        div[0][1][dataProperty] = b;
         assert.deepEqual(div.data(), [a, b]);
       },
       "with no arguments, returned array has undefined for null nodes": function(div) {
         var b = new Object(), actual = [];
         div[0][0] = null;
-        div[0][1].__data__ = b;
+        div[0][1][dataProperty] = b;
         var data = div.data();
         assert.isUndefined(data[0]);
         assert.strictEqual(data[1], b);
@@ -165,18 +165,18 @@ suite.addBatch({
       "assigns data as an array": function(span) {
         var a = new Object(), b = new Object();
         span.data([a, b]);
-        assert.strictEqual(span[0][0].__data__, a);
-        assert.strictEqual(span[0][1].__data__, b);
-        assert.strictEqual(span[1][0].__data__, a);
-        assert.strictEqual(span[1][1].__data__, b);
+        assert.strictEqual(span[0][0][dataProperty], a);
+        assert.strictEqual(span[0][1][dataProperty], b);
+        assert.strictEqual(span[1][0][dataProperty], a);
+        assert.strictEqual(span[1][1][dataProperty], b);
       },
       "assigns data as a function": function(span) {
         var a = new Object(), b = new Object(), c = new Object(), d = new Object();
         span.data(function(z, i) { return i ? [c, d] : [a, b]; });
-        assert.strictEqual(span[0][0].__data__, a);
-        assert.strictEqual(span[0][1].__data__, b);
-        assert.strictEqual(span[1][0].__data__, c);
-        assert.strictEqual(span[1][1].__data__, d);
+        assert.strictEqual(span[0][0][dataProperty], a);
+        assert.strictEqual(span[0][1][dataProperty], b);
+        assert.strictEqual(span[1][0][dataProperty], c);
+        assert.strictEqual(span[1][1][dataProperty], d);
       },
       "evaluates the function once per group": function(span) {
         var count = 0;

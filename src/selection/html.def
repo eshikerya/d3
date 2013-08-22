@@ -1,0 +1,5 @@
+/**
+ * @param {?string} value
+ * @return {d3_selectionPrototype|string}
+ */
+d3_selectionPrototype.html = function(value) {}

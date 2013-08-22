@@ -1,0 +1,7 @@
+/**
+ * @param {!string|Object.<string, function>} type
+ * @param {?Function|boolean} listener
+ * @param {?boolean} capture
+ * @return {d3_selectionPrototype}
+ */
+d3_selectionPrototype.on = function(type, listener, capture) {}

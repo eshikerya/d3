@@ -1,0 +1,7 @@
+/**
+ * @param {!string} name
+ * @param {?string} value
+ * @param {?number} priority
+ * @return {*}
+ */
+d3_selectionPrototype.style = function(name, value, priority) {}

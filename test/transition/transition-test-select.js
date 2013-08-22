@@ -26,8 +26,8 @@ module.exports = {
   },
   "propagates data to the selected elements": function(transition) {
     var t = transition.select("span");
-    assert.equal(t[0][1].__data__, "two");
-    assert.equal(t[0][2].__data__, "three");
+    assert.equal(t[0][1][dataProperty], "two");
+    assert.equal(t[0][2][dataProperty], "three");
   },
   "propagates delay to the selected elements": function(transition) {
     var t = transition.select("span");
@@ -40,11 +40,11 @@ module.exports = {
     assert.equal(t[0][2].__transition__[t.id].duration, 42);
   },
   "does not propagate data if no data was specified": function(transition) {
-    delete transition[0][1].__data__;
-    delete transition[0][1].firstChild.__data__;
+    delete transition[0][1][dataProperty];
+    delete transition[0][1].firstChild[dataProperty];
     var t = transition.select("span");
-    assert.isUndefined(t[0][1].__data__);
-    assert.equal(t[0][2].__data__, "three");
+    assert.isUndefined(t[0][1][dataProperty]);
+    assert.equal(t[0][2][dataProperty], "three");
   },
   "returns null if no match is found": function(transition) {
     var t = transition.select("span");

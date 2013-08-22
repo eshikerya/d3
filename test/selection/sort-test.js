@@ -58,7 +58,7 @@ suite.addBatch({
         assert.deepEqual(span[0].slice(0, -2).map(data), [3, 21]);
 
         for (var i = 1; i < 4; ++i) {
-          var d = span[i].parentNode.__data__;
+          var d = span[i].parentNode[dataProperty];
           assert.domNull(span[i][0].previousSibling);
           assert.domEqual(span[i][1], span[i][0].nextSibling);
           assert.domEqual(span[i][0], span[i][1].previousSibling);
@@ -75,7 +75,7 @@ suite.addBatch({
 });
 
 function data(d) {
-  return d.__data__;
+  return d[dataProperty];
 }
 
 suite.export(module);

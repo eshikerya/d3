@@ -30,8 +30,8 @@ module.exports = {
   },
   "preserves data": function(span) {
     var some = span.filter(function(d, i) { return d & 1; });
-    assert.equal(some[0][0].__data__, 1);
-    assert.equal(some[1][0].__data__, 3);
+    assert.equal(some[0][0][dataProperty], 1);
+    assert.equal(some[1][0][dataProperty], 3);
   },
   "preserves grouping": function(span) {
     var some = span.filter(function(d, i) { return d & 1; });

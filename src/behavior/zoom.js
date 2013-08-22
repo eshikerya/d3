@@ -20,7 +20,8 @@ d3.behavior.zoom = function() {
       touchmove = "touchmove.zoom",
       touchend = "touchend.zoom",
       touchtime, // time of last touchstart (to detect double-tap)
-      event = d3_eventDispatch(zoom, "zoom"),
+      event = d3_eventDispatch(zoom, "zoom", "rectSelect", "rectFinish"),
+      center,
       x0,
       x1,
       y0,

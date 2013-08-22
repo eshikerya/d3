@@ -481,8 +481,8 @@ d3 = function() {
       subgroup.parentNode = (group = this[j]).parentNode;
       for (var i = -1, n = group.length; ++i < n; ) {
         if (node = group[i]) {
-          subgroup.push(subnode = selector.call(node, node.__data__, i, j));
-          if (subnode && "__data__" in node) subnode.__data__ = node.__data__;
+          subgroup.push(subnode = selector.call(node, node[dataProperty], i, j));
+          if (subnode && dataProperty in node) subnode[dataProperty] = node[dataProperty];
         } else {
           subgroup.push(null);
         }
@@ -501,7 +501,7 @@ d3 = function() {
     for (var j = -1, m = this.length; ++j < m; ) {
       for (var group = this[j], i = -1, n = group.length; ++i < n; ) {
         if (node = group[i]) {
-          subgroups.push(subgroup = d3_array(selector.call(node, node.__data__, i, j)));
+          subgroups.push(subgroup = d3_array(selector.call(node, node[dataProperty], i, j)));
           subgroup.parentNode = node;
         }
       }
@@ -575,13 +575,14 @@ d3 = function() {
     }
     return value == null ? name.local ? attrNullNS : attrNull : typeof value === "function" ? name.local ? attrFunctionNS : attrFunction : name.local ? attrConstantNS : attrConstant;
   }
+  var bboxProperty = "__bbox";
   d3_selectionPrototype.bbox = function() {
-    var bb = this.property("__bbox__");
+    var bb = this.property(bboxProperty);
     if (bb) {
       return bb;
     } else {
       var tmp = this.node().getBBox();
-      this.property("__bbox__", bb = {
+      this.property(bboxProperty, bb = {
         x: tmp.x,
         y: tmp.y,
         width: tmp.width,
@@ -591,7 +592,7 @@ d3 = function() {
     }
   };
   d3_resetElemBBoxCache = function(el) {
-    d3.select(el).property("__bbox__", null);
+    d3.select(el).property(bboxProperty, null);
   };
   function d3_collapse(s) {
     return s.trim().replace(/\s+/g, " ");
@@ -751,13 +752,14 @@ d3 = function() {
       if (parent) parent.removeChild(this);
     });
   };
+  var dataProperty = "__data";
   d3_selectionPrototype.data = function(value, key) {
     var i = -1, n = this.length, group, node;
     if (!arguments.length) {
       value = new Array(n = (group = this[0]).length);
       while (++i < n) {
         if (node = group[i]) {
-          value[i] = node["__data__"];
+          value[i] = node[dataProperty];
         }
       }
       return value;
@@ -767,7 +769,7 @@ d3 = function() {
       if (key) {
         var nodeByKeyValue = new d3_Map(), dataByKeyValue = new d3_Map(), keyValues = [], keyValue;
         for (i = -1; ++i < n; ) {
-          keyValue = key.call(node = group[i], node["__data__"], i);
+          keyValue = key.call(node = group[i], node[dataProperty], i);
           if (nodeByKeyValue.has(keyValue)) {
             exitNodes[i] = node;
           } else {
@@ -779,7 +781,7 @@ d3 = function() {
           keyValue = key.call(groupData, nodeData = groupData[i], i);
           if (node = nodeByKeyValue.get(keyValue)) {
             updateNodes[i] = node;
-            node["__data__"] = nodeData;
+            node[dataProperty] = nodeData;
           } else if (!dataByKeyValue.has(keyValue)) {
             enterNodes[i] = d3_selection_dataNode(nodeData);
           }
@@ -796,7 +798,7 @@ d3 = function() {
           node = group[i];
           nodeData = groupData[i];
           if (node) {
-            node["__data__"] = nodeData;
+            node[dataProperty] = nodeData;
             updateNodes[i] = node;
           } else {
             enterNodes[i] = d3_selection_dataNode(nodeData);
@@ -818,7 +820,7 @@ d3 = function() {
     var enter = d3_selection_enter([]), update = d3_selection([]), exit = d3_selection([]);
     if (typeof value === "function") {
       while (++i < n) {
-        bind(group = this[i], value.call(group, group.parentNode["__data__"], i));
+        bind(group = this[i], value.call(group, group.parentNode[dataProperty], i));
       }
     } else {
       while (++i < n) {
@@ -834,12 +836,12 @@ d3 = function() {
     return update;
   };
   function d3_selection_dataNode(data) {
-    var k = "__data__", r = {};
+    var k = dataProperty, r = {};
     r[k] = data;
     return r;
   }
   d3_selectionPrototype.datum = function(value) {
-    return arguments.length ? this.property("__data__", value) : this.property("__data__");
+    return arguments.length ? this.property(dataProperty, value) : this.property(dataProperty);
   };
   d3_selectionPrototype.filter = function(filter) {
     var subgroups = [], subgroup, group, node;
@@ -848,7 +850,7 @@ d3 = function() {
       subgroups.push(subgroup = []);
       subgroup.parentNode = (group = this[j]).parentNode;
       for (var i = 0, n = group.length; i < n; i++) {
-        if ((node = group[i]) && filter.call(node, node["__data__"], i)) {
+        if ((node = group[i]) && filter.call(node, node[dataProperty], i)) {
           subgroup.push(node);
         }
       }
@@ -879,12 +881,12 @@ d3 = function() {
   function d3_selection_sortComparator(comparator) {
     if (!arguments.length) comparator = d3.ascending;
     return function(a, b) {
-      return a && b ? comparator(a["__data__"], b["__data__"]) : !a - !b;
+      return a && b ? comparator(a[dataProperty], b[dataProperty]) : !a - !b;
     };
   }
   d3_selectionPrototype.each = function(callback) {
     return d3_selection_each(this, function(node, i, j) {
-      callback.call(node, node["__data__"], i, j);
+      callback.call(node, node[dataProperty], i, j);
     });
   };
   function d3_selection_each(groups, callback) {
@@ -939,8 +941,8 @@ d3 = function() {
       subgroup.parentNode = group.parentNode;
       for (var i = -1, n = group.length; ++i < n; ) {
         if (node = group[i]) {
-          subgroup.push(upgroup[i] = subnode = selector.call(group.parentNode, node.__data__, i, j));
-          subnode.__data__ = node.__data__;
+          subgroup.push(upgroup[i] = subnode = selector.call(group.parentNode, node[dataProperty], i, j));
+          subnode[dataProperty] = node[dataProperty];
         } else {
           subgroup.push(null);
         }
@@ -1026,7 +1028,7 @@ d3 = function() {
   d3_selectionPrototype.map = function(callback) {
     var res = [];
     d3_selection_each(this, function(node, i, j) {
-      var r = callback.call(node, node["__data__"], i, j);
+      var r = callback.call(node, node[dataProperty], i, j);
       r !== null && r !== undefined && res.push(r);
     });
     return res;
@@ -1096,7 +1098,7 @@ d3 = function() {
     return function(e) {
       var o = d3.event;
       d3.event = e;
-      argumentz[0] = this["__data__"];
+      argumentz[0] = this[dataProperty];
       try {
         listener.apply(this, argumentz);
       } finally {
@@ -1229,7 +1231,7 @@ d3 = function() {
     return d3.rebind(drag, event, "on");
   };
   d3.behavior.zoom = function() {
-    var translate = [ 0, 0 ], translate0, scale = 1, scaleExtent = d3_behavior_zoomInfinity, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", rectSelect = [ 0, 0, 0, 0 ], touchstart = "touchstart.zoom", touchmove = "touchmove.zoom", touchend = "touchend.zoom", touchtime, event = d3_eventDispatch(zoom, "zoom"), x0, x1, y0, y1;
+    var translate = [ 0, 0 ], translate0, scale = 1, scaleExtent = d3_behavior_zoomInfinity, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", rectSelect = [ 0, 0, 0, 0 ], touchstart = "touchstart.zoom", touchmove = "touchmove.zoom", touchend = "touchend.zoom", touchtime, event = d3_eventDispatch(zoom, "zoom", "rectSelect", "rectFinish"), center, x0, x1, y0, y1;
     function zoom() {
       this.on(mousedown, mousedowned).on(d3_behavior_zoomWheel + ".zoom", mousewheeled).on(mousemove, mousewheelreset).on("dblclick.zoom", dblclicked).on(touchstart, touchstarted);
     }
@@ -5500,8 +5502,8 @@ d3 = function() {
     for (var j = -1, m = this.length; ++j < m; ) {
       subgroups.push(subgroup = []);
       for (var group = this[j], i = -1, n = group.length; ++i < n; ) {
-        if ((node = group[i]) && (subnode = selector.call(node, node.__data__, i, j))) {
-          if ("__data__" in node) subnode.__data__ = node.__data__;
+        if ((node = group[i]) && (subnode = selector.call(node, node[dataProperty], i, j))) {
+          if (dataProperty in node) subnode[dataProperty] = node[dataProperty];
           d3_transitionNode(subnode, i, id, node.__transition__[id]);
           subgroup.push(subnode);
         } else {
@@ -5518,7 +5520,7 @@ d3 = function() {
       for (var group = this[j], i = -1, n = group.length; ++i < n; ) {
         if (node = group[i]) {
           transition = node.__transition__[id];
-          subnodes = selector.call(node, node.__data__, i, j);
+          subnodes = selector.call(node, node[dataProperty], i, j);
           subgroups.push(subgroup = []);
           for (var k = -1, o = subnodes.length; ++k < o; ) {
             if (subnode = subnodes[k]) d3_transitionNode(subnode, k, id, transition);
@@ -5535,7 +5537,7 @@ d3 = function() {
     for (var j = 0, m = this.length; j < m; j++) {
       subgroups.push(subgroup = []);
       for (var group = this[j], i = 0, n = group.length; i < n; i++) {
-        if ((node = group[i]) && filter.call(node, node["__data__"], i)) {
+        if ((node = group[i]) && filter.call(node, node[dataProperty], i)) {
           subgroup.push(node);
         }
       }
@@ -5554,7 +5556,7 @@ d3 = function() {
   function d3_transition_tween(groups, name, value, tween) {
     var id = groups.id;
     return d3_selection_each(groups, typeof value === "function" ? function(node, i, j) {
-      node.__transition__[id].tween.set(name, tween(value.call(node, node["__data__"], i, j)));
+      node.__transition__[id].tween.set(name, tween(value.call(node, node[dataProperty], i, j)));
     } : (value = tween(value), function(node) {
       node.__transition__[id].tween.set(name, value);
     }));
@@ -5664,7 +5666,7 @@ d3 = function() {
   d3_transitionPrototype.delay = function(value) {
     var id = this.id;
     return d3_selection_each(this, typeof value === "function" ? function(node, i, j) {
-      node.__transition__[id].delay = value.call(node, node["__data__"], i, j) | 0;
+      node.__transition__[id].delay = value.call(node, node[dataProperty], i, j) | 0;
     } : (value |= 0, function(node) {
       node.__transition__[id].delay = value;
     }));
@@ -5672,7 +5674,7 @@ d3 = function() {
   d3_transitionPrototype.duration = function(value) {
     var id = this.id;
     return d3_selection_each(this, typeof value === "function" ? function(node, i, j) {
-      node.__transition__[id].duration = Math.max(1, value.call(node, node["__data__"], i, j) | 0);
+      node.__transition__[id].duration = Math.max(1, value.call(node, node[dataProperty], i, j) | 0);
     } : (value = Math.max(1, value | 0), function(node) {
       node.__transition__[id].duration = value;
     }));
@@ -5684,7 +5686,7 @@ d3 = function() {
       d3_transitionInheritId = id;
       d3_selection_each(this, function(node, i, j) {
         d3_transitionInherit = node.__transition__[id];
-        type.call(node, node["__data__"], i, j);
+        type.call(node, node[dataProperty], i, j);
       });
       d3_transitionInherit = inherit;
       d3_transitionInheritId = inheritId;
@@ -5727,7 +5729,7 @@ d3 = function() {
       };
       ++lock.count;
       d3.timer(function(elapsed) {
-        var d = node["__data__"], ease = transition.ease, delay = transition.delay, duration = transition.duration, tweened = [];
+        var d = node[dataProperty], ease = transition.ease, delay = transition.delay, duration = transition.duration, tweened = [];
         if (delay <= elapsed) return start(elapsed);
         d3_timer_replace(start, delay, time);
         function start(elapsed) {

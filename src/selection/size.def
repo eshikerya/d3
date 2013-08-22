@@ -1,0 +1,2 @@
+/** @return {number} */
+d3_selectionPrototype.size = function() {}

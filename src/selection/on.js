@@ -84,7 +84,7 @@ function d3_selection_onListener(listener, argumentz) {
   return function(e) {
     var o = d3.event; // Events can be reentrant (e.g., focus).
     d3.event = e;
-    argumentz[0] = this['__data__'];
+    argumentz[0] = this[dataProperty];
     try {
       listener.apply(this, argumentz);
     } finally {

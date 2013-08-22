@@ -63,7 +63,7 @@ function d3_transitionNode(node, i, id, inherit) {
     ++lock.count;
 
     d3.timer(function(elapsed) {
-      var d = node['__data__'],
+      var d = node[dataProperty],
           ease = transition.ease,
           delay = transition.delay,
           duration = transition.duration,

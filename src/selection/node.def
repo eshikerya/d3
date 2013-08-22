@@ -1,0 +1,2 @@
+/** @return {Node|null} */
+d3_selectionPrototype.node = function() {}

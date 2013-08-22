@@ -13,11 +13,11 @@ suite.addBatch({
       },
       "updates the data according to the specified function": function(body) {
         body.data([42]).datum(function(d, i) { return d + i; });
-        assert.equal(body.node().__data__, 42);
+        assert.equal(body.node()[dataProperty], 42);
       },
       "updates the data to the specified constant": function(body) {
         body.datum(43);
-        assert.equal(body.node().__data__, 43);
+        assert.equal(body.node()[dataProperty], 43);
       },
       "deletes the data if the function returns null": function(body) {
         body.data([42]).datum(function() { return null; });
@@ -48,13 +48,13 @@ suite.addBatch({
       },
       "updates the data according to the specified function": function(div) {
         div.data([42, 43]).datum(function(d, i) { return d + i; });
-        assert.equal(div[0][0].__data__, 42);
-        assert.equal(div[0][1].__data__, 44);
+        assert.equal(div[0][0][dataProperty], 42);
+        assert.equal(div[0][1][dataProperty], 44);
       },
       "updates the data to the specified constant": function(div) {
         div.datum(44);
-        assert.equal(div[0][0].__data__, 44);
-        assert.equal(div[0][1].__data__, 44);
+        assert.equal(div[0][0][dataProperty], 44);
+        assert.equal(div[0][1][dataProperty], 44);
       },
       "deletes the data if the function returns null": function(div) {
         div.datum(function() { return null; });
@@ -74,11 +74,11 @@ suite.addBatch({
         var node = div[0][1];
         div[0][1] = null;
         div.datum(function() { return 1; });
-        assert.equal(div[0][0].__data__, 1);
-        assert.equal(node.__data__, 2);
+        assert.equal(div[0][0][dataProperty], 1);
+        assert.equal(node[dataProperty], 2);
         div.datum(43);
-        assert.equal(div[0][0].__data__, 43);
-        assert.equal(node.__data__, 2);
+        assert.equal(div[0][0][dataProperty], 43);
+        assert.equal(node[dataProperty], 2);
       }
     }
   }

@@ -1,0 +1,42 @@
+/** @typedef {zoomType} */
+d3.behavior.zoom = function () {}
+
+/** @typedef {{Array.<number>}} */
+var Point;
+
+/**
+ * @param {?Point} x
+ * @return {zoomType|Point}
+ */
+d3.behavior.translate = function(x) {}
+
+/**
+ * @param {?number} x
+ * @return {zoomType|number}
+ */
+d3.behavior.scale = function(x) {}
+
+/**
+ * @param {Array.<number>} x
+ * @return {zoomType|Array.<number>}
+ */
+d3.behavior.scaleExtent = function(x) {}
+
+/**
+ * @param {?Point}
+ * @return {zoomType|Point}
+ */
+d3.behavior.center = function(_) {}
+
+/**
+ * @param {?Array.<number>}
+ * @return {zoomType|Array.<number>|null}
+ */
+d3.behavior.x = function(z) {}
+
+/**
+ * @param {?Array.<number>}
+ * @return {zoomType|Array.<number>|null}
+ */
+d3.behavior.y = function (z) {}
+

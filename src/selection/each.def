@@ -1,0 +1,5 @@
+/**
+ * @param {!function (Node, *, number, number)} callback
+ * @return {d3_selectionPrototype}
+ */
+d3_selectionPrototype.each = function(callback) {}

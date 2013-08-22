@@ -1,0 +1,5 @@
+/** @return {d3_selectionPrototype} */
+d3.selection = function () {};
+
+/** @typedef {d3_selectionPrototype} */
+var d3_selectionPrototype = d3.selection.prototype = [];

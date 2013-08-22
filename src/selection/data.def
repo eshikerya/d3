@@ -1,0 +1,17 @@
+/**
+ * @param {?Array.<*>} value
+ * @param {?string} key
+ * @return {d3_selectionPrototype}
+ */
+d3_selectionPrototype.data = function(value, key) {
+    /** @type {d3_selectionPrototype} */
+    var r = d3.select([]);
+
+    /** @type {d3_selectionPrototype} */
+    r.enter = d3.select([]);
+
+    /** @type {d3_selectionPrototype} */
+    r.exit = d3.select([]);
+
+    return r;
+}

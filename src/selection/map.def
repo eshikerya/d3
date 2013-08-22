@@ -1,0 +1,5 @@
+/**
+ * @param {!Function} callback
+ * @return {Array.<*>}
+ */
+d3_selectionPrototype.map = function(callback) {}

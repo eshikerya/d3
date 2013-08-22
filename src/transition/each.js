@@ -9,7 +9,7 @@ d3_transitionPrototype.each = function(type, listener) {
     d3_transitionInheritId = id;
     d3_selection_each(this, function(node, i, j) {
       d3_transitionInherit = node.__transition__[id];
-      type.call(node, node['__data__'], i, j);
+      type.call(node, node[dataProperty], i, j);
     });
     d3_transitionInherit = inherit;
     d3_transitionInheritId = inheritId;

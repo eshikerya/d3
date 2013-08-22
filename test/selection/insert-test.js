@@ -42,7 +42,7 @@ suite.addBatch({
       },
       "propagates data to new element": function(body) {
         var data = new Object(), div = body.data([data]).insert("div");
-        assert.strictEqual(div[0][0].__data__, data);
+        assert.strictEqual(div[0][0][dataProperty], data);
       },
       "returns a new selection": function(body) {
         assert.isFalse(body.insert("div") === body);
@@ -88,8 +88,8 @@ suite.addBatch({
       },
       "propagates data to new elements": function(div) {
         var a = new Object(), b = new Object(), span = div.data([a, b]).insert("span");
-        assert.strictEqual(span[0][0].__data__, a);
-        assert.strictEqual(span[0][1].__data__, b);
+        assert.strictEqual(span[0][0][dataProperty], a);
+        assert.strictEqual(span[0][1][dataProperty], b);
       },
       "returns a new selection": function(div) {
         assert.isFalse(div.insert("div") === div);
@@ -146,8 +146,8 @@ suite.addBatch({
       },
       "propagates data to new elements": function(body) {
         var a = new Object(), b = new Object(), div = body.html("").selectAll("div").data([a, b]).enter().insert("div");
-        assert.strictEqual(div[0][0].__data__, a);
-        assert.strictEqual(div[0][1].__data__, b);
+        assert.strictEqual(div[0][0][dataProperty], a);
+        assert.strictEqual(div[0][1][dataProperty], b);
       },
       "ignores null nodes": function(body) {
         body.html("").insert("div");

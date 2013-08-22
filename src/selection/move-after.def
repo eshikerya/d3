@@ -1,0 +1,6 @@
+/**
+ * @param {!Node} src
+ * @param {!Node} node
+ * @return {d3_selectionPrototype}
+ */
+d3_selectionPrototype.moveAfter = function(src, node) {}

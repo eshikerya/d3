@@ -1,0 +1,3 @@
+/**
+ * @return {{x: number, y: number, width: number, height: number}} */
+d3_selectionPrototype.bbox = function () {}
