@@ -56,6 +56,9 @@ import "move-before";
 import "move-ontop";
 import "map";
 
+import "transition";
+import "interrupt";
+
 // TODO fast singleton implementation?
 d3.select = function(node) {
   var group = [typeof node === "string" ? d3_select(node, d3_document) : node];
