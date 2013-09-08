@@ -4,7 +4,16 @@ d3_selectionPrototype.bbox = function () {
   if (bb) {
     return bb;
   } else {
-    var tmp = this.node().getBBox();
+    try {
+      var tmp = this.node().getBBox();
+    } catch (e) {
+      return {
+        'x': 0,
+        'y': 0,
+        'width': 0,
+        'height': 0
+      }
+    }
     this.property(bboxProperty, bb = {'x': tmp.x, 'y': tmp.y, 'width': tmp.width, 'height': tmp.height});
     return bb;
   }
