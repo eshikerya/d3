@@ -188,10 +188,10 @@ d3.behavior.zoom = function() {
 
       if (rectSelectFlag) {
         selectRect(d3.mouse(target), location0);
-        dispatchRS(event_);
+        dispatchRS(dispatch);
       } else {
         translateTo(d3.mouse(target), location0);
-        zoomed(event_);
+        zoomed(dispatch);
       }
 
       translateTo(d3.mouse(that), location0);
@@ -203,7 +203,7 @@ d3.behavior.zoom = function() {
       dragRestore(dragged && d3.event.target === target);
       zoomended(dispatch);
       if (rectSelectFlag) {
-        dispatchRS(event_, "rectFinish");
+        dispatchRS(dispatch, "rectFinish");
       }
     }
   }
