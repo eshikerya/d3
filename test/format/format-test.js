@@ -95,11 +95,39 @@ suite.addBatch({
       assert.strictEqual(f(145999999.999999347), "146M");
       assert.strictEqual(f(1e26), "100Y");
       assert.strictEqual(f(.000001), "1.00µ");
-      assert.strictEqual(f(.009995), "0.0100");
+      assert.strictEqual(f(.009995), "10.0m");
       var f = format(".4s");
       assert.strictEqual(f(999.5), "999.5");
       assert.strictEqual(f(999500), "999.5k");
       assert.strictEqual(f(.009995), "9.995m");
+    },
+    "can output SI prefix notation with appropriate rounding and currency symbol": function(format) {
+      var f = format("$.3s");
+      assert.strictEqual(f(0), "$0.00");
+      assert.strictEqual(f(1), "$1.00");
+      assert.strictEqual(f(10), "$10.0");
+      assert.strictEqual(f(100), "$100");
+      assert.strictEqual(f(999.5), "$1.00k");
+      assert.strictEqual(f(999500), "$1.00M");
+      assert.strictEqual(f(1000), "$1.00k");
+      assert.strictEqual(f(1500.5), "$1.50k");
+      assert.strictEqual(f(145500000), "$146M");
+      assert.strictEqual(f(145999999.999999347), "$146M");
+      assert.strictEqual(f(1e26), "$100Y");
+      assert.strictEqual(f(.000001), "$1.00µ");
+      assert.strictEqual(f(.009995), "$10.0m");
+      var f = format("$.4s");
+      assert.strictEqual(f(999.5), "$999.5");
+      assert.strictEqual(f(999500), "$999.5k");
+      assert.strictEqual(f(.009995), "$9.995m");
+    },
+    "SI prefix notation precision is consistent for small and large numbers": function(format) {
+      assert.deepEqual(
+        [    1e-5,     1e-4,     1e-3,     1e-2,     1e-1,    1e-0,     1e1,     1e2,      1e3,      1e4,      1e5].map(format("s")),
+        [    '10µ',   '100µ',    '1m',    '10m',   '100m',     '1',    '10',    '100',    '1k',    '10k',   '100k']);
+      assert.deepEqual(
+        [    1e-5,     1e-4,     1e-3,     1e-2,     1e-1,    1e-0,     1e1,     1e2,      1e3,      1e4,      1e5].map(format(".4s")),
+        ['10.00µ', '100.0µ', '1.000m', '10.00m', '100.0m', '1.000', '10.00', '100.0', '1.000k', '10.00k', '100.0k']);
     },
     "can output a currency": function(format) {
       var f = format("$");
@@ -322,6 +350,16 @@ suite.addBatch({
       assert.strictEqual(format("=+8,d")(0), "+      0");
       assert.strictEqual(format("=+13,d")(0), "+           0");
       assert.strictEqual(format("=+21,d")(0), "+                   0");
+    },
+    "pad after sign with currency": function(format) {
+      assert.strictEqual(format("=+$1,d")(0), "+$0");
+      assert.strictEqual(format("=+$1,d")(0), "+$0");
+      assert.strictEqual(format("=+$2,d")(0), "+$0");
+      assert.strictEqual(format("=+$3,d")(0), "+$0");
+      assert.strictEqual(format("=+$5,d")(0), "+$  0");
+      assert.strictEqual(format("=+$8,d")(0), "+$     0");
+      assert.strictEqual(format("=+$13,d")(0), "+$          0");
+      assert.strictEqual(format("=+$21,d")(0), "+$                  0");
     },
     "a space can denote positive numbers": function(format) {
       assert.strictEqual(format(" 1,d")(-1), "-1");
