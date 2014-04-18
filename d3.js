@@ -1459,8 +1459,6 @@
           translateTo(d3.mouse(target), location0);
           zoomed(dispatch);
         }
-        translateTo(d3.mouse(that), location0);
-        zoomed(dispatch);
       }
       function ended() {
         subject.on(mousemove, d3_window === that ? mousewheelreset : null).on(mouseup, null);

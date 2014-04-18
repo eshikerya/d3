@@ -193,9 +193,6 @@ d3.behavior.zoom = function() {
         translateTo(d3.mouse(target), location0);
         zoomed(dispatch);
       }
-
-      translateTo(d3.mouse(that), location0);
-      zoomed(dispatch);
     }
 
     function ended() {
