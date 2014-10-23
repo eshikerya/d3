@@ -1,0 +1,2 @@
+/** type {Event} */
+d3.event.sourceEvent = {};

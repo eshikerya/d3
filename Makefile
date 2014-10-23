@@ -4,42 +4,43 @@ GENERATED_FILES = \
 	bower.json \
 	component.json
 
-DEFS = \
-	./src/start.def \
-	./src/selection/selection.def \
-	./src/selection/append.def \
-	./src/selection/attr.def \
-	./src/selection/bbox.def \
-	./src/selection/call.def \
-	./src/selection/classed.def \
-	./src/selection/data.def \
-	./src/selection/datum.def \
-	./src/selection/each.def \
-	./src/selection/empty.def \
-	./src/selection/filter.def \
-	./src/selection/html.def \
-	./src/selection/insert.def \
-	./src/selection/map.def \
-	./src/selection/move-after.def \
-	./src/selection/move-before.def \
-	./src/selection/move-ontop.def \
-	./src/selection/node.def \
-	./src/selection/on.def \
-	./src/selection/order.def \
-	./src/selection/property.def \
-	./src/selection/remove.def \
-	./src/selection/select.def \
-	./src/selection/selectAll.def \
-	./src/selection/size.def \
-	./src/selection/sort.def \
-	./src/selection/style.def \
-	./src/selection/text.def \
-	./src/selection/transition.def \
-	./src/behavior/zoom.def \
-	./src/svg/svg.def \
-	./src/svg/cLink.def
+DEFS = $(shell find . -type f -name '*.def')
+# \
+# 	./src/start.def \
+# 	./src/selection/selection.def \
+# 	./src/selection/append.def \
+# 	./src/selection/attr.def \
+# 	./src/selection/bbox.def \
+# 	./src/selection/call.def \
+# 	./src/selection/classed.def \
+# 	./src/selection/data.def \
+# 	./src/selection/datum.def \
+# 	./src/selection/each.def \
+# 	./src/selection/empty.def \
+# 	./src/selection/filter.def \
+# 	./src/selection/html.def \
+# 	./src/selection/insert.def \
+# 	./src/selection/map.def \
+# 	./src/selection/move-after.def \
+# 	./src/selection/move-before.def \
+# 	./src/selection/move-ontop.def \
+# 	./src/selection/node.def \
+# 	./src/selection/on.def \
+# 	./src/selection/order.def \
+# 	./src/selection/property.def \
+# 	./src/selection/remove.def \
+# 	./src/selection/select.def \
+# 	./src/selection/selectAll.def \
+# 	./src/selection/size.def \
+# 	./src/selection/sort.def \
+# 	./src/selection/style.def \
+# 	./src/selection/text.def \
+# 	./src/selection/transition.def \
+# 	./src/behavior/zoom.def \
+# 	./src/svg/svg.def \
+# 	./src/svg/cLink.def
 
-# $(shell find . -type f -name '*.def')
+#
 
 all: $(GENERATED_FILES) d3.externs.js
 

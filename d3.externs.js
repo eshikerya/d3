@@ -1,10 +1,50 @@
-/** @namespace */
-var d3 = function () {};
-/** @return {d3_selectionPrototype} */
-d3.selection = function () {};
+d3.behavior.drag = function() {}
+/** @typedef {zoomType} */
+d3.behavior.zoom = function () {}
 
-/** @typedef {d3_selectionPrototype} */
-var d3_selectionPrototype = d3.selection.prototype = [];
+/** @typedef {{Array.<number>}} */
+var Point;
+
+/**
+ * @param {?Point} x
+ * @return {zoomType|Point}
+ */
+d3.behavior.translate = function(x) {}
+
+/**
+ * @param {?number} x
+ * @return {zoomType|number}
+ */
+d3.behavior.scale = function(x) {}
+
+/**
+ * @param {Array.<number>} x
+ * @return {zoomType|Array.<number>}
+ */
+d3.behavior.scaleExtent = function(x) {}
+
+/**
+ * @param {?Point}
+ * @return {zoomType|Point}
+ */
+d3.behavior.center = function(_) {}
+
+/**
+ * @param {?Array.<number>}
+ * @return {zoomType|Array.<number>|null}
+ */
+d3.behavior.x = function(z) {}
+
+/**
+ * @param {?Array.<number>}
+ * @return {zoomType|Array.<number>|null}
+ */
+d3.behavior.y = function (z) {}
+
+/** type {Event} */
+d3.event.sourceEvent = {};/** @return {Array} */
+d3.mouse = function (){}
+
 /**
  * @param {!string} name
  * @return {d3_selectionPrototype}
@@ -119,7 +159,12 @@ d3_selectionPrototype.remove = function() {}
 /** @return {d3_selectionPrototype} */
 d3_selectionPrototype.select = function () {};
 /** @return {d3_selectionPrototype} */
-d3_selectionPrototype.selectAll = function () {}/** @return {number} */
+d3_selectionPrototype.selectAll = function () {}/** @return {d3_selectionPrototype} */
+d3.selection = function () {};
+
+/** @typedef {d3_selectionPrototype} */
+var d3_selectionPrototype = d3.selection.prototype = [];
+/** @return {number} */
 d3_selectionPrototype.size = function() {}
 /**
  * @param {Function} comparator
@@ -140,50 +185,9 @@ d3_selectionPrototype.style = function(name, value, priority) {}
 d3_selectionPrototype.text = function(value) {}
 /** @return {d3_transitionPrototype} */
 d3_selectionPrototype.transition = function() {}
-/** @typedef {zoomType} */
-d3.behavior.zoom = function () {}
-
-/** @typedef {{Array.<number>}} */
-var Point;
-
-/**
- * @param {?Point} x
- * @return {zoomType|Point}
- */
-d3.behavior.translate = function(x) {}
-
-/**
- * @param {?number} x
- * @return {zoomType|number}
- */
-d3.behavior.scale = function(x) {}
-
-/**
- * @param {Array.<number>} x
- * @return {zoomType|Array.<number>}
- */
-d3.behavior.scaleExtent = function(x) {}
-
-/**
- * @param {?Point}
- * @return {zoomType|Point}
- */
-d3.behavior.center = function(_) {}
-
-/**
- * @param {?Array.<number>}
- * @return {zoomType|Array.<number>|null}
- */
-d3.behavior.x = function(z) {}
-
-/**
- * @param {?Array.<number>}
- * @return {zoomType|Array.<number>|null}
- */
-d3.behavior.y = function (z) {}
-
 /** @namespace */
-d3.svg = {};/**
+var d3 = function () {};
+/**
  * @typedef {{
  *      source: function (function): casualLink
  *      target: function (function): casualLink
@@ -195,3 +199,5 @@ var casualLink;
  * @return {casualLink}
  */
 d3.svg.casualLink = function() {}
+/** @namespace */
+d3.svg = {};d3_transitionPrototype.ease = function(value) {}

@@ -1,0 +1,3 @@
+/** @return {Array} */
+d3.mouse = function (){}
+
