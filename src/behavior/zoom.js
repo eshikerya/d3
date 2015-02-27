@@ -11,9 +11,12 @@ import "behavior";
 d3.behavior.zoom = function() {
   var view = {x: 0, y: 0, k: 1},
       translate0, // translate when we started zooming (to avoid drift)
-      center, // desired position of translate0 after zooming
+      center0, // implicit desired position of translate0 after zooming
+      center, // explicit desired position of translate0 after zooming
       size = [960, 500], // viewport size; required for zoom interpolation
       scaleExtent = d3_behavior_zoomInfinity,
+      duration = 250,
+      zooming = 0,
       mousedown = "mousedown.zoom",
       mousemove = "mousemove.zoom",
       mouseup = "mouseup.zoom",
@@ -30,7 +33,6 @@ d3.behavior.zoom = function() {
   function zoom(g) {
     g   .on(mousedown, mousedowned)
         .on(d3_behavior_zoomWheel + ".zoom", mousewheeled)
-        .on(mousemove, mousewheelreset)
         .on("dblclick.zoom", dblclicked)
         .on(touchstart, touchstarted);
   }
@@ -48,8 +50,8 @@ d3.behavior.zoom = function() {
             .tween("zoom:zoom", function() {
               var dx = size[0],
                   dy = size[1],
-                  cx = dx / 2,
-                  cy = dy / 2,
+                  cx = center0 ? center0[0] : dx / 2,
+                  cy = center0 ? center0[1] : dy / 2,
                   i = d3.interpolateZoom(
                     [(cx - view.x) / view.k, (cy - view.y) / view.k, dx / view.k],
                     [(cx - view1.x) / view1.k, (cy - view1.y) / view1.k, dx / view1.k]
@@ -59,6 +61,9 @@ d3.behavior.zoom = function() {
                 this.__chart__ = view = {x: cx - l[0] * k, y: cy - l[1] * k, k: k};
                 zoomed(dispatch);
               };
+            })
+            .each("interrupt.zoom", function() {
+              zoomended(dispatch);
             })
             .each("end.zoom", function() {
               zoomended(dispatch);
@@ -104,6 +109,12 @@ d3.behavior.zoom = function() {
     return zoom;
   };
 
+  zoom.duration = function(_) {
+    if (!arguments.length) return duration;
+    duration = +_; // TODO function based on interpolateZoom distance?
+    return zoom;
+  };
+
   zoom.x = function(z) {
     if (!arguments.length) return x1;
     x1 = z;
@@ -146,13 +157,24 @@ d3.behavior.zoom = function() {
     rectSelect[3] = np[1] - l[1];
   }
 
+  function zoomTo(that, p, l, k) {
+    that.__chart__ = {x: view.x, y: view.y, k: view.k};
+
+    scaleTo(Math.pow(2, k));
+    translateTo(center0 = p, l);
+
+    that = d3.select(that);
+    if (duration > 0) that = that.transition().duration(duration);
+    that.call(zoom.event);
+  }
+
   function rescale() {
     if (x1) x1.domain(x0.range().map(function(x) { return (x - view.x) / view.k; }).map(x0.invert));
     if (y1) y1.domain(y0.range().map(function(y) { return (y - view.y) / view.k; }).map(y0.invert));
   }
 
   function zoomstarted(dispatch) {
-    dispatch({type: "zoomstart"});
+    if (!zooming++) dispatch({type: "zoomstart"});
   }
 
   function zoomed(dispatch) {
@@ -161,7 +183,8 @@ d3.behavior.zoom = function() {
   }
 
   function zoomended(dispatch) {
-    dispatch({type: "zoomend"});
+    if (!--zooming) dispatch({type: "zoomend"});
+    center0 = null;
   }
 
   function dispatchRS(event, type) {
@@ -196,7 +219,7 @@ d3.behavior.zoom = function() {
     }
 
     function ended() {
-      subject.on(mousemove, d3_window === that ? mousewheelreset : null).on(mouseup, null);
+      subject.on(mousemove, null).on(mouseup, null);
       dragRestore(dragged && d3.event.target === target);
       zoomended(dispatch);
       if (rectSelectFlag) {
@@ -216,12 +239,15 @@ d3.behavior.zoom = function() {
         touchmove = "touchmove" + zoomName,
         touchend = "touchend" + zoomName,
         targets = [],
-        subject = d3.select(that).on(mousedown, null).on(touchstart, started), // prevent duplicate events
+        subject = d3.select(that),
         dragRestore = d3_event_dragSuppress();
 
-    d3_selection_interrupt.call(that);
     started();
     zoomstarted(dispatch);
+
+    // Workaround for Chrome issue 412723: the touchstart listener must be set
+    // after the touchmove listener.
+    subject.on(mousedown, null).on(touchstart, started); // prevent duplicate events
 
     // Updates locations of any touches in locations0.
     function relocate() {
@@ -252,11 +278,9 @@ d3.behavior.zoom = function() {
 
       if (touches.length === 1) {
         if (now - touchtime < 500) { // dbltap
-          var p = touches[0], l = locations0[p.identifier];
-          scaleTo(view.k * 2);
-          translateTo(p, l);
+          var p = touches[0];
+          zoomTo(that, p, locations0[p.identifier], Math.floor(Math.log(view.k) / Math.LN2) + 1);
           d3_eventPreventDefault();
-          zoomed(dispatch);
         }
         touchtime = now;
       } else if (touches.length > 1) {
@@ -270,6 +294,9 @@ d3.behavior.zoom = function() {
       var touches = d3.touches(that),
           p0, l0,
           p1, l1;
+
+      d3_selection_interrupt.call(that);
+
       for (var i = 0, n = touches.length; i < n; ++i, l1 = null) {
         p1 = touches[i];
         if (l1 = locations0[p1.identifier]) {
@@ -316,30 +343,19 @@ d3.behavior.zoom = function() {
   function mousewheeled() {
     var dispatch = event.of(this, arguments);
     if (mousewheelTimer) clearTimeout(mousewheelTimer);
-    else d3_selection_interrupt.call(this), zoomstarted(dispatch);
+    else translate0 = location(center0 = center || d3.mouse(this)), d3_selection_interrupt.call(this), zoomstarted(dispatch);
     mousewheelTimer = setTimeout(function() { mousewheelTimer = null; zoomended(dispatch); }, 50);
     d3_eventPreventDefault();
-    var point = center || d3.mouse(this);
-    if (!translate0) translate0 = location(point);
     scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * view.k);
-    translateTo(point, translate0);
+    translateTo(center0, translate0);
     zoomed(dispatch);
-  }
-
-  function mousewheelreset() {
-    translate0 = null;
   }
 
   function dblclicked() {
-    var dispatch = event.of(this, arguments),
-        p = d3.mouse(this),
-        l = location(p),
+    var p = d3.mouse(this),
         k = Math.log(view.k) / Math.LN2;
-    zoomstarted(dispatch);
-    scaleTo(Math.pow(2, d3.event.shiftKey ? Math.ceil(k) - 1 : Math.floor(k) + 1));
-    translateTo(p, l);
-    zoomed(dispatch);
-    zoomended(dispatch);
+
+    zoomTo(this, p, location(p), d3.event.shiftKey ? Math.ceil(k) - 1 : Math.floor(k) + 1);
   }
 
   return d3.rebind(zoom, event, "on");

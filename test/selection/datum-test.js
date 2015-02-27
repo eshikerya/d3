@@ -21,11 +21,11 @@ suite.addBatch({
       },
       "deletes the data if the function returns null": function(body) {
         body.data([42]).datum(function() { return null; });
-        assert.isFalse("__data__" in body.node());
+        assert.isFalse("__data" in body.node());
       },
       "deletes the data if the constant is null": function(body) {
         body.data([42]).datum(null);
-        assert.isFalse("__data__" in body.node());
+        assert.isFalse("__data" in body.node());
       },
       "returns the current selection": function(body) {
         assert.isTrue(body.datum(function() { return 1; }) === body);
@@ -58,13 +58,13 @@ suite.addBatch({
       },
       "deletes the data if the function returns null": function(div) {
         div.datum(function() { return null; });
-        assert.isFalse("__data__" in div[0][0]);
-        assert.isFalse("__data__" in div[0][1]);
+        assert.isFalse("__data" in div[0][0]);
+        assert.isFalse("__data" in div[0][1]);
       },
       "deletes the data if the constant is null": function(div) {
         div.datum(null);
-        assert.isFalse("__data__" in div[0][0]);
-        assert.isFalse("__data__" in div[0][1]);
+        assert.isFalse("__data" in div[0][0]);
+        assert.isFalse("__data" in div[0][1]);
       },
       "returns the current selection": function(div) {
         assert.isTrue(div.datum(function() { return 1; }) === div);

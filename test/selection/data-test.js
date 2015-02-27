@@ -205,12 +205,12 @@ suite.addBatch({
         assert.equal(enter[1].length, 4);
         assert.domNull(enter[0][0]);
         assert.domNull(enter[0][1]);
-        assert.deepEqual(enter[0][2], {__data__: 2});
-        assert.deepEqual(enter[0][3], {__data__: 3});
+        assert.deepEqual(enter[0][2], {__data: 2});
+        assert.deepEqual(enter[0][3], {__data: 3});
         assert.domNull(enter[1][0]);
         assert.domNull(enter[1][1]);
-        assert.deepEqual(enter[1][2], {__data__: 2});
-        assert.deepEqual(enter[1][3], {__data__: 3});
+        assert.deepEqual(enter[1][2], {__data: 2});
+        assert.deepEqual(enter[1][3], {__data: 3});
       },
       "defines an exit selection for exiting data": function(span) {
         var exit = span.data([0]).exit();
@@ -239,9 +239,9 @@ suite.addBatch({
         assert.equal(enter[0].length, 2);
         assert.equal(enter[1].length, 2);
         assert.domNull(enter[0][0]);
-        assert.deepEqual(enter[0][1], {__data__: 2});
+        assert.deepEqual(enter[0][1], {__data: 2});
         assert.domNull(enter[1][0]);
-        assert.deepEqual(enter[1][1], {__data__: 2});
+        assert.deepEqual(enter[1][1], {__data: 2});
 
         var exit = update.exit();
         assert.equal(exit.length, 2);
