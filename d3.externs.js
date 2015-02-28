@@ -116,6 +116,10 @@ d3_selectionPrototype.html = function(value) {}
  */
 d3_selectionPrototype.insert = function(name, before) {}
 /**
+ * @param {!string|SVGElement|HTMLElement} name
+ * @return {d3_selectionPrototype}
+ */
+d3_selectionPrototype.interrupt = function(name) {}/**
  * @param {!Function} callback
  * @return {Array.<*>}
  */
