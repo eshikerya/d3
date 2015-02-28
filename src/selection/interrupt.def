@@ -1,0 +1,5 @@
+/**
+ * @param {!string|SVGElement|HTMLElement} name
+ * @return {d3_selectionPrototype}
+ */
+d3_selectionPrototype.interrupt = function(name) {}
