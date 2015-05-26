@@ -7,4 +7,4 @@ d3_transitionPrototype.duration = function(value) {
   return d3_selection_each(this, typeof value === "function"
       ? function(node, i, j) { node[ns][id].duration = Math.max(1, value.call(node, node[dataProperty], i, j)); }
       : (value = Math.max(1, value), function(node) { node[ns][id].duration = value; }));
-  };
+};

@@ -2,7 +2,8 @@ GENERATED_FILES = \
 	d3.js \
 	d3.min.js \
 	bower.json \
-	component.json
+	component.json \
+	package.js
 
 DEFS = $(shell find . -type f -name '*.def')
 # \
@@ -71,6 +72,11 @@ d3.min.js: d3.js bin/uglify
 
 d3.externs.js: d3.js $(DEFS)
 	cat $(DEFS) > $@
+
+package.js: bin/meteor package.json
+	@rm -f $@
+	bin/meteor > package.js
+	@chmod a-w $@
 
 clean:
 	rm -f -- $(GENERATED_FILES)
