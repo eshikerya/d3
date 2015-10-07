@@ -55,6 +55,10 @@ import "empty";
 import "node";
 import "size";
 import "enter";
+import "move-ontop";
+import "move-after";
+import "move-before";
+import "map";
 
 // TODO fast singleton implementation?
 d3.select = function(node) {
