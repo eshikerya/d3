@@ -1,7 +1,6 @@
 GENERATED_FILES = \
 	d3.js \
 	d3.min.js \
-	bower.json \
 	component.json \
 	package.js
 
@@ -45,7 +44,7 @@ DEFS = $(shell find . -type f -name '*.def')
 
 all: $(GENERATED_FILES) d3.externs.js
 
-.PHONY: clean all test
+.PHONY: clean all test publish
 
 test:
 	@npm test
@@ -77,6 +76,10 @@ package.js: bin/meteor package.json
 	@rm -f $@
 	bin/meteor > package.js
 	@chmod a-w $@
+
+publish:
+	npm publish
+	meteor publish && rm -- .versions
 
 clean:
 	rm -f -- $(GENERATED_FILES)
