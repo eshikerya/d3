@@ -191,17 +191,5 @@ d3_selectionPrototype.text = function(value) {}
 d3_selectionPrototype.transition = function() {}
 /** @namespace */
 var d3 = function () {};
-/**
- * @typedef {{
- *      source: function (function): casualLink
- *      target: function (function): casualLink
- * }}
- */
-var casualLink;
-
-/**
- * @return {casualLink}
- */
-d3.svg.casualLink = function() {}
 /** @namespace */
 d3.svg = {};d3_transitionPrototype.ease = function(value) {}

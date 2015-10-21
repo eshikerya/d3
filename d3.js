@@ -7305,48 +7305,6 @@
     sw: "nesw-resize"
   };
   var d3_svg_brushResizes = [ [ "n", "e", "s", "w", "nw", "ne", "se", "sw" ], [ "e", "w" ], [ "n", "s" ], [] ];
-  d3.svg.casualLink = function() {
-    var source = d3_source, target = d3_target, corner = 15, margin = 10, abs = Math.abs;
-    function casualLink(d, i) {
-      var p0 = source.call(this, d, i), p3 = target.call(this, d, i);
-      switch (true) {
-       case p0 === false && p3 !== false:
-        p0 = {
-          x: p3.x,
-          y: p3.y - margin * 2
-        };
-        break;
-
-       case p0 !== false && p3 === false:
-        p3 = {
-          x: p0.x,
-          y: p0.y + margin * 2
-        };
-        break;
-      }
-      var cx = (p0.x - p3.x) / 2, cy = (p0.y - p3.y) / 2, p = [ p0, {
-        x: p0.x,
-        y: p0.y + 30
-      }, {
-        x: p0.x - cx,
-        y: p0.y - cy
-      }, p3 ].map(function(o) {
-        return [ o.x, o.y ];
-      });
-      return "M" + p[0] + "Q" + p[1] + " " + p[2] + "T" + p[3];
-    }
-    casualLink.source = function(x) {
-      if (!arguments.length) return source;
-      source = d3_functor(x);
-      return casualLink;
-    };
-    casualLink.target = function(x) {
-      if (!arguments.length) return target;
-      target = d3_functor(x);
-      return casualLink;
-    };
-    return casualLink;
-  };
   if (typeof define === "function" && define.amd) define(d3); else if (typeof module === "object" && module.exports) module.exports = d3;
   this.d3 = d3;
 }();
