@@ -94,7 +94,8 @@ d3.behavior.zoom = function() {
 
   zoom.scale = function(_) {
     if (!arguments.length) return view.k;
-    view = {x: view.x, y: view.y, k: +_}; // copy-on-write
+    view = {x: view.x, y: view.y, k: null}; // copy-on-write
+    scaleTo(+_);
     rescale();
     return zoom;
   };
@@ -202,7 +203,6 @@ d3.behavior.zoom = function() {
 
   function mousedowned() {
     var that = this,
-        target = d3.event.target,
         dispatch = event.of(that, arguments),
         dragged = 0,
         subject = d3.select(d3_window(that)).on(mousemove, moved).on(mouseup, ended),
@@ -227,7 +227,7 @@ d3.behavior.zoom = function() {
 
     function ended() {
       subject.on(mousemove, null).on(mouseup, null);
-      dragRestore(dragged && d3.event.target === target);
+      dragRestore(dragged);
       zoomended(dispatch);
       if (rectSelectFlag) {
         dispatchRS(dispatch, "rectFinish");
@@ -353,7 +353,7 @@ d3.behavior.zoom = function() {
     else d3_selection_interrupt.call(this), translate0 = location(center0 = center || d3.mouse(this)), zoomstarted(dispatch);
     mousewheelTimer = setTimeout(function() { mousewheelTimer = null; zoomended(dispatch); }, 50);
     d3_eventPreventDefault();
-    scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * view.k);
+    scaleTo(Math.pow(2, d3_behavior_zoomDelta() * 0.002) * view.k);
     translateTo(center0, translate0);
     zoomed(dispatch);
   }
