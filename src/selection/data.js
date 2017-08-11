@@ -39,7 +39,7 @@ d3_selectionPrototype.data = function(value, key) {
 
       for (i = -1; ++i < n;) {
         if (node = group[i]) {
-          if (nodeByKeyValue.has(keyValue = key.call(node, node.__data__, i))) {
+          if (nodeByKeyValue.has(keyValue = key.call(node, node[dataProperty], i))) {
             exitNodes[i] = node; // duplicate selection key
           } else {
             nodeByKeyValue.set(keyValue, node);

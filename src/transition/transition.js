@@ -79,7 +79,7 @@ function d3_transitionNode(node, i, ns, id, inherit) {
       active.timer.t = NaN;
       --lock.count;
       delete lock[activeId];
-      active.event && active.event.interrupt.call(node, node.__data__, active.index);
+      active.event && active.event.interrupt.call(node, node[dataProperty], active.index);
     }
 
     // Cancel any pre-empted transitions. No interrupt event is dispatched
@@ -108,12 +108,12 @@ function d3_transitionNode(node, i, ns, id, inherit) {
 
     // Start the transition.
     lock.active = id;
-    transition.event && transition.event.start.call(node, node.__data__, i);
+    transition.event && transition.event.start.call(node, node[dataProperty], i);
 
     // Initialize the tweens.
     tweens = [];
     transition.tween.forEach(function(key, value) {
-      if (value = value.call(node, node.__data__, i)) {
+      if (value = value.call(node, node[dataProperty], i)) {
         tweens.push(value);
       }
     });
@@ -133,7 +133,7 @@ function d3_transitionNode(node, i, ns, id, inherit) {
     }
 
     if (t >= 1) {
-      transition.event && transition.event.end.call(node, node.__data__, i);
+      transition.event && transition.event.end.call(node, node[dataProperty], i);
       if (--lock.count) delete lock[id];
       else delete node[ns];
       return 1;

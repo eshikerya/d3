@@ -21,7 +21,7 @@ function d3_selection_interruptNS(ns) {
       if (--lock.count) delete lock[activeId];
       else delete this[ns];
       lock.active += 0.5;
-      active.event && active.event.interrupt.call(this, this.__data__, active.index);
+      active.event && active.event.interrupt.call(this, this[dataProperty], active.index);
     }
   };
 }
