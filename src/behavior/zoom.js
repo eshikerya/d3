@@ -215,6 +215,7 @@ d3.behavior.zoom = function() {
 
     function moved() {
       dragged = 1;
+      var target = d3.event.target;
 
       if (rectSelectFlag) {
         selectRect(d3.mouse(target), location0);

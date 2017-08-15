@@ -1570,6 +1570,7 @@
       zoomstarted(dispatch);
       function moved() {
         dragged = 1;
+        var target = d3.event.target;
         if (rectSelectFlag) {
           selectRect(d3.mouse(target), location0);
           dispatchRS(dispatch);
